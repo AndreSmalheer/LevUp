@@ -8,6 +8,13 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='styles/styles.css') }}"
     />
+    <script>
+      let currentXP = {{ user.xp | tojson }};
+      let nextLevelXP = {{ user.xp_to_next_level | tojson }};
+      let currentLevel = {{ user.level | tojson }};
+      let current_coins  = {{ user.coins | tojson }};
+    </script>
+
     <script
       src="{{ url_for('static', filename='script/main.js') }}"
       defer
@@ -24,14 +31,14 @@
 
     <div id="system_container">
       <div id="status_container">
-        <h1 id="name">Andre</h1>
+        <h1 id="name">{{ user.name }}</h1>
         <div id="level_coin_container">
           <div id="level_container">
-            <h1>1</h1>
+            <h1>{{ user.level }}</h1>
             <h2>Level</h2>
           </div>
           <div id="coin_container">
-            <h1>0</h1>
+            <h1>{{ user.coins }}</h1>
             <h2>Coins</h2>
           </div>
         </div>
@@ -42,24 +49,52 @@
       </div>
 
       <div id="tasks_container">
+        <!-- {% for task in tasks %}
         <div class="task">
           <label class="task_label">
-            <input type="checkbox" class="task_checkbox" />
-            <span class="task_text">Collect Data</span>
+            <input
+              type="checkbox"
+              class="task_checkbox"
+              {%
+              if
+              task.completed
+              %}checked{%
+              endif
+              %}
+            />
+            <span class="task_text">{{ task.task_name }}</span>
             <div class="reward_container">
               <div class="coin_container">
                 <img
                   class="coin_icon"
                   src="{{ url_for('static', filename='images/icons/coin.png') }}"
                 />
-                <h1>20</h1>
+                <h1>{{ task.coin_reward }}</h1>
               </div>
               <div class="xp_container">
                 <img
                   class="coin_icon"
                   src="{{ url_for('static', filename='images/icons/coin.png') }}"
                 />
-                <h1>20</h1>
+                <h1>{{ task.xp_reward }}</h1>
+              </div>
+            </div>
+          </label>
+        </div>
+        {% endfor %} -->
+
+        <div class="task completed">
+          <label class="task_label">
+            <input type="checkbox" class="task_checkbox" checked="" />
+            <span class="task_text">Get muffins</span>
+            <div class="reward_container">
+              <div class="coin_container">
+                <img class="coin_icon" src="/static/images/icons/coin.png" />
+                <h1>10</h1>
+              </div>
+              <div class="xp_container">
+                <img class="coin_icon" src="/static/images/icons/coin.png" />
+                <h1>3</h1>
               </div>
             </div>
           </label>

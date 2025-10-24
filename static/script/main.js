@@ -2,11 +2,6 @@ const container = document.getElementById("system_container");
 const sound = document.getElementById("openSound");
 const msg = document.getElementById("activate_msg");
 
-let currentXP = 0;
-let nextLevelXP = 100;
-let currentLevel = 1;
-let current_coins = 0;
-
 function activateSystem() {
   msg.style.opacity = 0;
   container.classList.add("active");
@@ -57,6 +52,14 @@ function add_xp(amount) {
   progressBar.style.width = `${progressPercent}%`;
 }
 
+function set_xp(amount) {
+  const progressPercent = (amount / nextLevelXP) * 100;
+  const progressBar = document.getElementById("progress_bar");
+  progressBar.style.width = `${progressPercent}%`;
+}
+
+set_xp(currentXP);
+
 function getTaskRewards(taskLabel) {
   const coinElement = taskLabel.querySelector(
     ".reward_container .coin_container h1"
@@ -74,9 +77,43 @@ function getTaskRewards(taskLabel) {
 function updateRewards(taskLabel, isChecked) {
   const { coins, xp } = getTaskRewards(taskLabel);
   const factor = isChecked ? 1 : -1;
-
   add_coins(coins * factor);
   add_xp(xp * factor);
+
+  const taskTextSpan = taskLabel.querySelector(".task_text");
+  if (!taskTextSpan) return;
+
+  const taskName = taskTextSpan.textContent.trim(); // get clean task name
+
+  if (isChecked) {
+    completeTask(taskName);
+  } else {
+    uncompleteTask(taskName);
+  }
+}
+
+function completeTask(taskName) {
+  fetch(`/completed_task/${encodeURIComponent(taskName)}`, {
+    method: "POST",
+  })
+    .then(async (response) => {
+      const data = await response.json();
+      console.log("✅ Task completed:", data);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });
+}
+
+function uncompleteTask(taskName) {
+  fetch(`/uncomplete_task/${encodeURIComponent(taskName)}`, {
+    method: "POST",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("❌ Task uncompleted:", data);
+    })
+    .catch((err) => console.error("Error:", err));
 }
 
 // Attach event listeners to all checkboxes

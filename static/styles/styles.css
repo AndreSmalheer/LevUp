@@ -207,6 +207,11 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.task.completed {
+  rgba(0, 80, 150, 0.3)  /* darker and slightly transparent */
+
+}
+
 .task:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 200, 255, 0.25);
