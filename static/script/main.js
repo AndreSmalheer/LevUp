@@ -46,6 +46,10 @@ function add_xp(amount) {
   // Prevent XP from going negative if at level 1
   if (currentXP < 0) currentXP = 0;
 
+  h1_xp_container = document.getElementById("current_xp");
+
+  h1_xp_container.innerHTML = currentXP;
+
   // Update progress bar
   const progressPercent = (currentXP / nextLevelXP) * 100;
   const progressBar = document.getElementById("progress_bar");

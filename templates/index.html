@@ -46,10 +46,16 @@
         <div id="progress_container">
           <div id="progress_bar"></div>
         </div>
+
+        <div id="progress_texts">
+          <span id="current_xp">{{ user.xp }}</span>
+          <span id="xp_label">XP</span>
+          <span id="xp_needed">{{ user.xp_to_next_level }}</span>
+        </div>
       </div>
 
       <div id="tasks_container">
-        <!-- {% for task in tasks %}
+        {% for task in tasks %}
         <div class="task">
           <label class="task_label">
             <input
@@ -81,24 +87,7 @@
             </div>
           </label>
         </div>
-        {% endfor %} -->
-
-        <div class="task completed">
-          <label class="task_label">
-            <input type="checkbox" class="task_checkbox" checked="" />
-            <span class="task_text">Get muffins</span>
-            <div class="reward_container">
-              <div class="coin_container">
-                <img class="coin_icon" src="/static/images/icons/coin.png" />
-                <h1>10</h1>
-              </div>
-              <div class="xp_container">
-                <img class="coin_icon" src="/static/images/icons/coin.png" />
-                <h1>3</h1>
-              </div>
-            </div>
-          </label>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </body>
