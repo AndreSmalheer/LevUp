@@ -16,6 +16,31 @@ function activateSystem() {
   document.removeEventListener("click", activateSystem);
 }
 
+function show_add_task_window() {
+  const container = document.getElementById("system_container");
+  const task_container = document.getElementById("add_task_window");
+
+  // Start the reverse animation
+  container.classList.remove("active");
+  void container.offsetWidth;
+  container.classList.add("deactive");
+
+  container.addEventListener("animationend", function handler() {
+    // Hide system container immediately
+    container.style.display = "none";
+
+    // Delay 10ms before showing task window
+    setTimeout(() => {
+      sound.currentTime = 0;
+      sound.play().catch(() => {});
+
+      task_container.classList.add("active");
+    }, 150);
+
+    container.removeEventListener("animationend", handler);
+  });
+}
+
 document.addEventListener("click", activateSystem);
 
 // --------------------
