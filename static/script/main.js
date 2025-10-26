@@ -236,6 +236,70 @@ document.querySelectorAll(".task_checkbox").forEach((checkbox) => {
   });
 });
 
+function addTaskToDOM(task) {
+  const tasksContainer = document.getElementById("tasks_container");
+
+  // Create task wrapper
+  const taskDiv = document.createElement("div");
+  taskDiv.classList.add("task");
+
+  // Create label
+  const label = document.createElement("label");
+  label.classList.add("task_label");
+
+  // Checkbox
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.classList.add("task_checkbox");
+  if (task.completed) checkbox.checked = true;
+
+  // Task name
+  const span = document.createElement("span");
+  span.classList.add("task_text");
+  span.textContent = task.task_name;
+
+  // Reward container
+  const rewardContainer = document.createElement("div");
+  rewardContainer.classList.add("reward_container");
+
+  // Coin container
+  const coinContainer = document.createElement("div");
+  coinContainer.classList.add("coin_container");
+  const coinIcon = document.createElement("img");
+  coinIcon.classList.add("coin_icon");
+  coinIcon.src = "/static/images/icons/coin.png"; // Adjust path if needed
+  const coinAmount = document.createElement("h1");
+  coinAmount.textContent = task.coin_reward;
+  coinContainer.appendChild(coinIcon);
+  coinContainer.appendChild(coinAmount);
+
+  // XP container
+  const xpContainer = document.createElement("div");
+  xpContainer.classList.add("xp_container");
+  const xpIcon = document.createElement("img");
+  xpIcon.classList.add("coin_icon");
+  xpIcon.src = "/static/images/icons/coin.png"; // Adjust path if needed
+  const xpAmount = document.createElement("h1");
+  xpAmount.textContent = task.xp_reward;
+  xpContainer.appendChild(xpIcon);
+  xpContainer.appendChild(xpAmount);
+
+  // Assemble reward container
+  rewardContainer.appendChild(coinContainer);
+  rewardContainer.appendChild(xpContainer);
+
+  // Assemble label
+  label.appendChild(checkbox);
+  label.appendChild(span);
+  label.appendChild(rewardContainer);
+
+  // Add label to task div
+  taskDiv.appendChild(label);
+
+  // Add task div to container
+  tasksContainer.appendChild(taskDiv);
+}
+
 document
   .getElementById("add_task_form")
   .addEventListener("submit", async (e) => {
@@ -250,6 +314,8 @@ document
 
     const result = await response.json();
     console.log(result);
+
+    addTaskToDOM(result.task);
 
     // Close popup and reset form
     hideWindow("add_task_window", "system_container");

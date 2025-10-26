@@ -200,26 +200,43 @@ def add_task():
     xp_reward = request.form.get('xp_reward')
     start_time = request.form.get('start_time')
     end_time = request.form.get('end_time')
+    repeat_days = request.form.getlist('repeat_days')
+
+    if repeat_days:
+     repeat_days_str = ",".join(repeat_days)
+    else:
+     repeat_days_str = None  # or use "" if you prefer
 
     if start_time == "":
-        start_time = "NULL"
+        start_time = None
 
     if end_time == "":
-        end_time = "NULL"
+        end_time = None
 
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
 
     # Insert the data
     cursor.execute('''
-     INSERT INTO tasks (user_id, task_name, coin_reward, xp_reward, start_time, end_time)
-     VALUES (?, ?, ?, ?, ?, ?)
-    ''', (user["id"], task_name, coin_reward, xp_reward, start_time, end_time))
+    INSERT INTO tasks (user_id, task_name, coin_reward, xp_reward, start_time, end_time, repeat_days)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (user["id"], task_name, coin_reward, xp_reward, start_time, end_time, repeat_days_str))
 
     conn.commit()
     conn.close()    
 
-    return jsonify({"status": "success", "message": "Task added!"})
+    task = {
+    "task_name": request.form.get('task_name'),
+    "coin_reward": request.form.get('coin_reward'),
+    "xp_reward": request.form.get('xp_reward'),
+    "start_time": request.form.get('start_time') or None,
+    "end_time": request.form.get('end_time') or None,
+    "repeat_days": request.form.getlist('repeat_days') or []
+    }
+
+    task_dict = dict(task)
+
+    return jsonify({"status": "success", "message": "Task added!", "task": task_dict})
 
 @app.route('/')
 def home():
