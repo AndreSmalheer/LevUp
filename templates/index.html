@@ -101,7 +101,27 @@
       </ul>
     </div>
 
-    <div id="add_task_window" class="popup-window"></div>
+    <div id="add_task_window" class="popup-window">
+      <form id="add_task_form">
+        <label for="task_name">Task name</label>
+        <input type="text" id="task_name" name="task_name" value="Task" />
+
+        <label for="coin_reward">Coin reward</label>
+        <input type="number" id="coin_reward" name="coin_reward" value="2" />
+
+        <label for="xp_reward">XP reward</label>
+        <input type="number" id="xp_reward" name="xp_reward" value="2" />
+
+        <label for="start_time">Start date</label>
+        <input type="date" id="start_time" name="start_time" />
+
+        <label for="end_time">End date</label>
+        <input type="date" id="end_time" name="end_time" />
+
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+
     <div id="edit_task_window" class="popup-window"></div>
     <div id="delete_task_window" class="popup-window"></div>
   </body>

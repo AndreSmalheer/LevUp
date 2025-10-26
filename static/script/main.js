@@ -44,6 +44,39 @@ function showWindow(containerId, soundId) {
   });
 }
 
+function hideWindow(windowToHideId, containerToShowId) {
+  const windowEl = document.getElementById(windowToHideId);
+  const container = document.getElementById(containerToShowId);
+
+  // Trigger deactive animation on the window
+  windowEl.classList.remove("active");
+  void windowEl.offsetWidth; // force reflow
+  windowEl.classList.add("deactive");
+
+  // When deactive animation ends
+  windowEl.addEventListener("animationend", function handler() {
+    windowEl.classList.remove("deactive"); // reset class
+
+    // Slight delay before showing container
+    setTimeout(() => {
+      const sound = document.getElementById("openSound");
+
+      container.classList.remove("deactive");
+      void container.offsetWidth;
+
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+      }
+
+      container.style.display = "block";
+      container.classList.add("active");
+    }, 150);
+
+    windowEl.removeEventListener("animationend", handler);
+  });
+}
+
 function show_add_task_window() {
   showWindow("add_task_window", "openSound");
 }
@@ -202,3 +235,23 @@ document.querySelectorAll(".task_checkbox").forEach((checkbox) => {
     updateRewards(taskLabel, checkbox.checked);
   });
 });
+
+document
+  .getElementById("add_task_form")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    const response = await fetch("/add_task", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    // Close popup and reset form
+    hideWindow("add_task_window", "system_container");
+    e.target.reset();
+  });
