@@ -1,0 +1,55 @@
+body {
+  background: linear-gradient(135deg, #0f0c29, #302b63, #242323);
+  font-family: "Poppins", sans-serif;
+  color: #aee7ff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.pop-up {
+  width: clamp(280px, 90vw, 800px);
+  height: clamp(300px, 80vh, 700px);
+  box-sizing: border-box;
+  background: rgba(0, 122, 209, 0.11);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), 0 0 40px rgba(0, 122, 209, 0.2);
+  display: none;
+}
+
+.pop-up.deactive {
+  display: block;
+  animation: openSystem 0.5s cubic-bezier(0.25, 1.2, 0.5, 1) reverse forwards;
+}
+
+.pop-up.active {
+  display: block;
+  animation: openSystem 0.8s cubic-bezier(0.25, 1.2, 0.5, 1) forwards;
+}
+
+@keyframes openSystem {
+  0% {
+    width: clamp(280px, 90vw, 800px);
+    height: 0;
+  }
+  1% {
+    width: clamp(280px, 90vw, 800px);
+    height: 1px;
+  }
+  10% {
+    width: clamp(280px, 90vw, 800px);
+    height: clamp(20px, 5vh, 50px);
+  }
+  100% {
+    width: clamp(280px, 90vw, 800px);
+    height: clamp(300px, 80vh, 700px);
+  }
+}
