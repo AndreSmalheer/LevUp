@@ -253,6 +253,12 @@ function addTaskToDOM(task) {
   checkbox.classList.add("task_checkbox");
   if (task.completed) checkbox.checked = true;
 
+  checkbox.addEventListener("change", (event) => {
+    const taskLabel = event.target.closest(".task_label");
+    if (!taskLabel) return;
+    updateRewards(taskLabel, checkbox.checked);
+  });
+
   // Task name
   const span = document.createElement("span");
   span.classList.add("task_text");
