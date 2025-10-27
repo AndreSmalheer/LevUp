@@ -1,4 +1,5 @@
 import { switch_window } from "../system.js";
+import { removeTaskFromDOM } from "./domTasks.js";
 
 function initTaskPopUps() {
   const tasks = document.querySelectorAll(".task");
@@ -29,6 +30,12 @@ function initTaskPopUps() {
           .querySelector(".task_text")
           .textContent.trim();
         document.getElementById("delete_task_name").textContent = taskName;
+
+        document.getElementById("confirm_delete_button").onclick = function () {
+          removeTaskFromDOM(taskName);
+          removeTask(taskName);
+        };
+
         switch_window("delete_task_window");
       }
       popUp.classList.remove("active");

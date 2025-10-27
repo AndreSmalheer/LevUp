@@ -192,6 +192,18 @@ def uncomplete_task(name):
         "new_coins": new_coins
     })
 
+@app.route('/delete_task/<task_name>', methods=['POST'])
+def delete_task(task_name):
+    name = unquote(task_name)
+    conn = sqlite3.connect('data.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM tasks WHERE task_name = ?", (name,))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"success": True})
 
 @app.route('/add_task', methods=['POST'])
 def add_task():

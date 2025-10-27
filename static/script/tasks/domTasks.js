@@ -67,3 +67,26 @@ export function addTaskToDOM(task) {
   // Add task div to container
   tasksContainer.appendChild(taskDiv);
 }
+
+export function removeTaskFromDOM(taskName) {
+  console.log("🗑️ Attempting to remove task:", taskName);
+
+  // Find all task elements
+  const taskElements = document.querySelectorAll(".task");
+
+  let found = false;
+
+  taskElements.forEach((taskDiv) => {
+    const span = taskDiv.querySelector(".task_text");
+    if (span && span.textContent === taskName) {
+      console.log("✅ Found matching task element:", taskDiv);
+      taskDiv.remove();
+      console.log("🚮 Task removed from DOM successfully.");
+      found = true;
+    }
+  });
+
+  if (!found) {
+    console.warn("⚠️ Task not found in DOM:", taskName);
+  }
+}

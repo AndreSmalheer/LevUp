@@ -88,6 +88,10 @@
     <script type="module">
       import { switch_window } from "{{ url_for('static', filename='script/system.js') }}";
       window.switch_window = switch_window;
+
+      import { removeTask } from "{{ url_for('static', filename='script/api.js') }}";
+
+      window.removeTask = removeTask;
     </script>
   </head>
   <body>
@@ -237,7 +241,9 @@
           >
             Decline
           </button>
-          <button id="confirm_delete_button">Confirm</button>
+          <button id="confirm_delete_button" onclick="removeTask()">
+            Confirm
+          </button>
         </div>
       </div>
     </div>
