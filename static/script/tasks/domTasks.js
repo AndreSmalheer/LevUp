@@ -25,6 +25,29 @@ export function addTaskToDOM(task) {
   span.classList.add("task_text");
   span.textContent = task.task_name;
 
+  // Time container (only if start or end time exists)
+  if (task.start_time || task.end_time) {
+    const timeContainer = document.createElement("div");
+    timeContainer.classList.add("time_container");
+
+    if (task.start_time) {
+      const startTime = document.createElement("span");
+      startTime.classList.add("start_time");
+      startTime.textContent = task.start_time;
+      timeContainer.appendChild(startTime);
+    }
+
+    if (task.end_time) {
+      const endTime = document.createElement("span");
+      endTime.classList.add("end_time");
+      endTime.textContent = task.end_time;
+      timeContainer.appendChild(endTime);
+    }
+
+    // Add time container before reward container
+    label.appendChild(timeContainer);
+  }
+
   // Reward container
   const rewardContainer = document.createElement("div");
   rewardContainer.classList.add("reward_container");
@@ -34,7 +57,7 @@ export function addTaskToDOM(task) {
   coinContainer.classList.add("coin_container");
   const coinIcon = document.createElement("img");
   coinIcon.classList.add("coin_icon");
-  coinIcon.src = "/static/images/icons/coin.png"; // Adjust path if needed
+  coinIcon.src = "/static/images/icons/coin.png";
   const coinAmount = document.createElement("h1");
   coinAmount.textContent = task.coin_reward;
   coinContainer.appendChild(coinIcon);
@@ -45,7 +68,7 @@ export function addTaskToDOM(task) {
   xpContainer.classList.add("xp_container");
   const xpIcon = document.createElement("img");
   xpIcon.classList.add("coin_icon");
-  xpIcon.src = "/static/images/icons/coin.png"; // Adjust path if needed
+  xpIcon.src = "/static/images/icons/coin.png";
   const xpAmount = document.createElement("h1");
   xpAmount.textContent = task.xp_reward;
   xpContainer.appendChild(xpIcon);
@@ -66,6 +89,7 @@ export function addTaskToDOM(task) {
   // Add task div to container
   tasksContainer.appendChild(taskDiv);
 
+  // Reinitialize functions
   initTaskPopUps();
   initCheckboxes();
 }
