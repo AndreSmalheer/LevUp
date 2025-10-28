@@ -31,13 +31,18 @@ def get_today_repeating_tasks():
     current_day = datetime.now().strftime("%A").lower()
 
     for task in tasks:
-        repeat_days = task['repeat_days']
+        task_failed = task['failed']
 
-        if repeat_days != None:
-            if current_day in repeat_days:
+        if task_failed:
+         today_tasks.append(task)
+        else: 
+         repeat_days = task['repeat_days']
+ 
+         if repeat_days != None:
+             if current_day in repeat_days:
+              today_tasks.append(task)
+         else:   
              today_tasks.append(task)
-        else:   
-            today_tasks.append(task)
 
     return today_tasks 
 
