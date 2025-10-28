@@ -136,7 +136,7 @@
       <div id="tasks_container">
         {% for task in tasks %}
         <div
-          class="task {% if task.completed %}completed{% endif %}"
+          class="task {% if task.completed %} completed {% elif task.failed %} failed {% endif %}"
           id="{{ task.task_id }}"
         >
           <label class="task_label">
