@@ -17,6 +17,7 @@ def get_tasks():
         "end_time": row["end_time"],
         "completed": bool(row["completed"]),
         "failed": bool(row['failed']),
+        "penelty_id": (row['penelty_id']),
         "repeat_days": row["repeat_days"]
     } for row in rows]
     cursor.close()
@@ -45,6 +46,22 @@ def get_today_repeating_tasks():
              today_tasks.append(task)
 
     return today_tasks 
+
+def get_punishment(punishment_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT name, description FROM penalties WHERE penalty_id = ?", 
+        (punishment_id,)
+    )
+    row = cursor.fetchone()
+    conn.close()
+
+    if row:
+        return {"name": row[0], "description": row[1]}
+    else:
+        return {"error": "Punishment not found"}
+
 
 def delete_task_from_db(task_id):
     conn = get_connection()

@@ -41,3 +41,16 @@ export async function getTaskDetails(taskID) {
     console.error("Error:", err);
   }
 }
+
+export async function getPunishmentDetail(punishment_id) {
+  const url = `/getPunishmint/${punishment_id}`;
+
+  try {
+    const res = await fetch(url, { method: "POST" });
+    if (!res.ok) throw new Error("Request failed: " + res.status);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("Error:", err);
+  }
+}

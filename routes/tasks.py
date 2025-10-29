@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from urllib.parse import unquote
 import sqlite3
 from database.db import get_connection
-from database.task_queries import delete_task_from_db
+from database.task_queries import delete_task_from_db, get_punishment
 from database.user_queries import get_user
 from database.task_queries import get_tasks
 from database.user_queries import get_user
@@ -201,6 +201,12 @@ def getTaskDetails(task_id):
         return jsonify({"status": "ok", "task": wanted_task})
     else:
         return jsonify({"status": "not found"})
+
+@tasks_bp.route("/getPunishmint/<punishmint_id>", methods=['POST'])
+def getPunishmint(punishmint_id):
+   punishment = get_punishment(punishmint_id)
+
+   return jsonify(punishment)
 
 @tasks_bp.route("/update_task/<task_id>", methods=['POST'])
 def update_task(task_id):
