@@ -41,6 +41,15 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='styles/components/form.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/components/buttons.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/windows/penelty_window.css') }}"
+    />
 
     <script>
       let currentXP = {{ user.xp | tojson }};
@@ -308,15 +317,42 @@
             are you sure?
           </h1>
           <button
+            class="system-button"
             id="decline_delete_button"
             onclick="switch_window('system_container')"
           >
             Decline
           </button>
-          <button id="confirm_delete_button" onclick="removeTask()">
+          <button
+            class="system-button"
+            id="confirm_delete_button"
+            onclick="removeTask()"
+          >
             Confirm
           </button>
         </div>
+      </div>
+    </div>
+
+    <div id="penelty_window" class="system-window">
+      <div
+        class="back-btn"
+        style="position: absolute"
+        onclick="switch_window('system_container')"
+      ></div>
+
+      <div id="accept_punishment_container">
+        <h1>
+          Because you failed to complete
+          <span class="punishment_task">Task name</span>, You must
+          <span class="punishment">Punisment name</span>
+        </h1>
+        <button
+          class="system-button"
+          onclick="switch_window('system_container')"
+        >
+          Accept punishment
+        </button>
       </div>
     </div>
 

@@ -1,3 +1,4 @@
+import { switch_window } from "../system.js";
 import { updateRewards } from "./taskRewards.js";
 
 export function initCheckboxes() {
@@ -12,6 +13,7 @@ export function initCheckboxes() {
 
       if (taskContainer.classList.contains("failed")) {
         console.log(`Task failed for task ${taskContainer.id}`);
+        switch_window("penelty_window");
         return;
       }
 

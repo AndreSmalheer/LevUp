@@ -10,6 +10,18 @@ export function initTaskPopUps() {
   tasks.forEach((task) => {
     task.addEventListener("contextmenu", (e) => {
       e.preventDefault();
+
+      const popUp = document.querySelector(".task-pop-up");
+      if (!popUp.dataset.original) {
+        popUp.dataset.original = popUp.innerHTML;
+      }
+
+      if (task.classList.contains("failed")) {
+        popUp.innerHTML = "<ul><li>Unavailable</li></ul>";
+      } else {
+        popUp.innerHTML = popUp.dataset.original;
+      }
+
       popUp.style.left = `${e.pageX}px`;
       popUp.style.top = `${e.pageY}px`;
       popUp.classList.add("active");
@@ -33,7 +45,6 @@ export function initTaskPopUps() {
         document.getElementById("delete_task_name").textContent = taskName;
 
         document.getElementById("confirm_delete_button").onclick = function () {
-          console.log();
           removeTaskFromDOM(activeTask.id);
           removeTask(activeTask.id);
         };
