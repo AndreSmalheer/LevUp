@@ -106,6 +106,9 @@
       import { removeTask } from "{{ url_for('static', filename='script/api.js') }}";
 
       window.removeTask = removeTask;
+
+      import { accept_punishment } from "{{ url_for('static', filename='script/tasks/punishment.js') }}";
+      window.accept_punishment = accept_punishment;
     </script>
   </head>
   <body>
@@ -344,13 +347,10 @@
       <div id="accept_punishment_container">
         <h1>
           Because you failed to complete
-          <span class="punishment_task">Task name</span>, You must
-          <span class="punishment">Punisment name</span>
+          <span id="punishment_task">Task name</span>, You must
+          <span id="punishment">Punisment name</span>
         </h1>
-        <button
-          class="system-button"
-          onclick="switch_window('system_container')"
-        >
+        <button class="system-button" onclick="accept_punishment('none')">
           Accept punishment
         </button>
       </div>

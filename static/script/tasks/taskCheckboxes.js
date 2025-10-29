@@ -1,5 +1,6 @@
 import { switch_window } from "../system.js";
 import { updateRewards } from "./taskRewards.js";
+import { setup_accepet_punishment_window } from "./punishment.js";
 
 export function initCheckboxes() {
   document.querySelectorAll(".task_checkbox").forEach((checkbox) => {
@@ -12,8 +13,7 @@ export function initCheckboxes() {
       if (!task_id) return;
 
       if (taskContainer.classList.contains("failed")) {
-        console.log(`Task failed for task ${taskContainer.id}`);
-        switch_window("penelty_window");
+        setup_accepet_punishment_window(task_id);
         return;
       }
 
