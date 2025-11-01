@@ -258,12 +258,7 @@ def update_task(task_id):
     start_time = request.form.get('start_time')
     end_time = request.form.get('end_time')
     days = request.form.getlist('repeat_days')
-    repeat_days = ",".join(days) if days else None
-
-    if repeat_days:
-     repeat_days_str = ",".join(repeat_days)
-    else:
-     repeat_days_str = None
+    repeat_days_str = ",".join(days) if days else None
 
     if start_time == "":
         start_time = None
@@ -296,7 +291,7 @@ def update_task(task_id):
         repeat_days = ?
     WHERE
         user_id = ? AND id = ?
-    ''', (task_name, coin_reward, xp_reward, start_time, end_time, repeat_days, user["id"], task_id))
+    ''', (task_name, coin_reward, xp_reward, start_time, end_time, repeat_days_str, user["id"], task_id))
 
     conn.commit()
     conn.close() 

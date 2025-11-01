@@ -59,7 +59,7 @@ export async function addTaskToDOM(task) {
 
       if (endMnTotal < currentTime) {
         taskDiv.classList.add("failed");
-        console.log(task.penelty_id);
+        // console.log(task.penelty_id);
         if (!task.completed && task.penelty_id == null) {
           let data = await markTaskAsFailed(task.task_id);
         }
@@ -146,6 +146,14 @@ export async function updateTaskFromDOM(task) {
 
   if (!taskElement) {
     console.warn(`Task with ID ${taskID} not found in DOM.`);
+    return;
+  }
+
+  let repeat_days = task.repeat_days || [];
+
+  if (repeat_days.length > 0) {
+    // console.log("Task has repeat days, hiding task:", taskID);
+    taskElement.style.display = "none";
     return;
   }
 
