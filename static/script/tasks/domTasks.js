@@ -3,6 +3,43 @@ import { initTaskPopUps } from "./taskPopups.js";
 import { initCheckboxes } from "./taskCheckboxes.js";
 import { markTaskAsFailed } from "../api.js";
 
+export function shouldDisplayTask(task) {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  const currentTime = currentHour * 60 + currentMinute;
+
+  // Check repeat days
+  const repeatDays = task.repeat_days || [];
+  const today = now
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase();
+  if (repeatDays.length > 0 && !repeatDays.includes(today)) {
+    return false;
+  }
+
+  // Check start time
+  if (task.start_time) {
+    const [startHourStr, startMinuteStr] = task.start_time.split(":");
+    const startTimeTotal =
+      parseInt(startHourStr) * 60 + parseInt(startMinuteStr);
+    if (currentTime < startTimeTotal) {
+      return false;
+    }
+  }
+
+  // Check end time
+  if (task.end_time) {
+    const [endHourStr, endMinuteStr] = task.end_time.split(":");
+    const endTimeTotal = parseInt(endHourStr) * 60 + parseInt(endMinuteStr);
+    if (currentTime > endTimeTotal) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export async function addTaskToDOM(task) {
   const tasksContainer = document.getElementById("tasks_container");
 
@@ -157,9 +194,8 @@ export function removeTaskFromDOM(taskID) {
 }
 
 export async function updateTaskFromDOM(task) {
-  let taskID = task.task_id;
+  const taskID = task.task_id;
   const taskContainer = document.getElementById("tasks_container");
-
   const taskElement = taskContainer.querySelector(`.task[id="${taskID}"]`);
 
   if (!taskElement) {
@@ -167,75 +203,43 @@ export async function updateTaskFromDOM(task) {
     return;
   }
 
-  const today = new Date()
-    .toLocaleDateString("en-US", { weekday: "long" })
-    .toLowerCase();
+  // Determine if the task should be displayed
+  const display = shouldDisplayTask(task);
+  taskElement.style.display = display ? "block" : "none";
 
-  let repeat_days = task.repeat_days || [];
-
-  if (repeat_days.length > 0) {
-    if (!repeat_days.includes(today)) {
-      taskElement.style.display = "none";
-    }
-  }
-
-  if (task.start_time || task.end_time) {
+  // Check if task has failed
+  if (task.end_time) {
     const now = new Date();
-    const currentHour = now.getHours();
-    const currentMn = now.getMinutes();
-    const currentTime = currentHour * 60 + currentMn;
+    const [endHourStr, endMinuteStr] = task.end_time.split(":");
+    const endTimeTotal = parseInt(endHourStr) * 60 + parseInt(endMinuteStr);
+    const currentTime = now.getHours() * 60 + now.getMinutes();
 
-    if (task.start_time) {
-      const start_time = task.start_time;
-      const [startHourStr, startMnStr] = start_time.split(":");
-
-      const startMnTotal = parseInt(startHourStr) * 60 + parseInt(startMnStr);
-
-      if (!startMnTotal < currentTime) {
-        taskElement.style.display = "none";
-        return;
-      }
-    }
-
-    if (task.end_time) {
-      const end_time = task.end_time;
-
-      const [endHourStr, endMnStr] = end_time.split(":");
-
-      const endMnTotal = parseInt(endHourStr) * 60 + parseInt(endMnStr);
-
-      if (endMnTotal < currentTime) {
-        if (!task.completed && task.penelty_id == null) {
-          let data = await markTaskAsFailed(task.task_id);
-
-          taskContainer
-            .querySelector(`.task[id="${taskID}"]`)
-            .classList.add("failed");
-        }
-      }
+    if (
+      currentTime > endTimeTotal &&
+      !task.completed &&
+      task.penelty_id == null
+    ) {
+      await markTaskAsFailed(task.task_id);
+      taskElement.classList.add("failed");
     }
   }
+
+  // Update task content
+  taskElement.querySelector(".task_text").textContent = task.task_name;
 
   const startTimeElem = taskElement.querySelector(".start_time");
+  if (startTimeElem) startTimeElem.textContent = task.start_time;
+
   const endTimeElem = taskElement.querySelector(".end_time");
+  if (endTimeElem) endTimeElem.textContent = task.end_time;
 
-  if (taskElement) {
-    taskElement.querySelector(".task_text").textContent = task.task_name;
-
-    if (startTimeElem) {
-      startTimeElem.textContent = task.start_time;
-    }
-
-    if (endTimeElem) {
-      endTimeElem.textContent = task.end_time;
-    }
-
-    taskElement.querySelector(".coin_container h1").textContent =
-      task.coin_reward;
-    taskElement.querySelector(".xp_container h1").textContent = task.xp_reward;
-  }
+  taskElement.querySelector(".coin_container h1").textContent =
+    task.coin_reward;
+  taskElement.querySelector(".xp_container h1").textContent = task.xp_reward;
 }
 
 for (const task of tasks) {
-  addTaskToDOM(task);
+  if (shouldDisplayTask(task)) {
+    addTaskToDOM(task);
+  }
 }

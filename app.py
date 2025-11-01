@@ -55,7 +55,7 @@ app.register_blueprint(user_bp)
 @app.route('/')
 def home():
     user = get_user()
-    tasks = get_today_repeating_tasks()
+    tasks = get_tasks()
     return render_template('index.html', user=user, tasks=tasks)
 
 if __name__ == '__main__':
