@@ -76,7 +76,6 @@ def home():
     return render_template('index.html', user=user, tasks=tasks)
 
 if __name__ == '__main__':
-    reset_tasks()
     app.run(host="0.0.0.0", port=5000, debug=True)
 
     
