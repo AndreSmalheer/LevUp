@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from database.user_queries import get_user
-from database.task_queries import get_tasks, mark_task_failed, delete_task_from_db, get_today_repeating_tasks
+from database.task_queries import get_tasks, mark_task_failed, delete_task_from_db
 from routes.tasks import delete_task
 from routes.tasks import tasks_bp
 from routes.user import user_bp
@@ -17,10 +17,12 @@ def reset_tasks():
         repeat_days = task['repeat_days']
 
         if repeat_days:
+            completed = task['completed']
             failed = task['failed']
 
-            if failed == False:
-                mark_task_failed(task['task_id'])
+            if completed != True:
+                if not failed:
+                 mark_task_failed(task['task_id'])
 
         else:
             completed = task['completed']
