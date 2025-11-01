@@ -112,12 +112,30 @@ export async function addTaskToDOM(task) {
   // Add label to task div
   taskDiv.appendChild(label);
 
-  // Add task div to container
-  tasksContainer.appendChild(taskDiv);
+  let repeat_days = task.repeat_days || [];
 
-  // Reinitialize functions
-  initTaskPopUps();
-  initCheckboxes();
+  console.log(repeat_days);
+
+  if (repeat_days.length > 0) {
+    const today = new Date()
+      .toLocaleDateString("en-US", { weekday: "long" })
+      .toLowerCase();
+
+    if (repeat_days.includes(today)) {
+      // Add task div to container
+      tasksContainer.appendChild(taskDiv);
+
+      // Reinitialize functions
+      initTaskPopUps();
+      initCheckboxes();
+    }
+  } else if (repeat_days.length === 0) {
+    tasksContainer.appendChild(taskDiv);
+
+    // Reinitialize functions
+    initTaskPopUps();
+    initCheckboxes();
+  }
 }
 
 export function removeTaskFromDOM(taskID) {
@@ -149,12 +167,14 @@ export async function updateTaskFromDOM(task) {
     return;
   }
 
+  const today = new Date()
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase();
+
   let repeat_days = task.repeat_days || [];
 
-  if (repeat_days.length > 0) {
-    // console.log("Task has repeat days, hiding task:", taskID);
+  if (!repeat_days.includes(today)) {
     taskElement.style.display = "none";
-    return;
   }
 
   if (task.start_time || task.end_time) {
