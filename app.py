@@ -1,11 +1,13 @@
 from flask import Flask, render_template
 from database.user_queries import get_user
 from database.task_queries import get_tasks, mark_task_failed, delete_task_from_db
+from helpers.task_helpers import insert_task
 from routes.tasks import delete_task
 from routes.tasks import tasks_bp
 from routes.user import user_bp
 from flask_apscheduler import APScheduler
 from datetime import datetime
+from database.db import get_connection
 
 app = Flask(__name__)
 scheduler = APScheduler()
@@ -23,6 +25,16 @@ def reset_tasks():
             if completed != True:
                 if not failed:
                  mark_task_failed(task['task_id'])
+
+                 conn = get_connection()
+                 user = get_user()
+                 task_name = task['task_name']
+                 coin_reward = task['coin_reward']
+                 xp_reward = task['xp_reward']
+                 start_time = task['start_time']
+                 end_time = task['end_time']
+                 repeat_days_str = ",".join(repeat_days) if repeat_days else None
+                 insert_task(conn, user["id"], task_name, coin_reward, xp_reward, start_time, end_time, repeat_days_str)
 
         else:
             completed = task['completed']
