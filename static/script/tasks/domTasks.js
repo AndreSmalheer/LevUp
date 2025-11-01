@@ -1,8 +1,9 @@
 import { updateRewards } from "./taskRewards.js";
 import { initTaskPopUps } from "./taskPopups.js";
 import { initCheckboxes } from "./taskCheckboxes.js";
+import { markTaskAsFailed } from "../api.js";
 
-export function addTaskToDOM(task) {
+export async function addTaskToDOM(task) {
   const tasksContainer = document.getElementById("tasks_container");
 
   // Create task wrapper
@@ -30,15 +31,41 @@ export function addTaskToDOM(task) {
     const timeContainer = document.createElement("div");
     timeContainer.classList.add("time_container");
 
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMn = now.getMinutes();
+    const currentTime = currentHour * 60 + currentMn;
+
     if (task.start_time) {
       const startTime = document.createElement("span");
-      startTime.classList.add("start_time");
       startTime.textContent = task.start_time;
-      timeContainer.appendChild(startTime);
+
+      const [startHourStr, startMnStr] = task.start_time.split(":");
+      const startMnTotal = parseInt(startHourStr) * 60 + parseInt(startMnStr);
+
+      if (startMnTotal < currentTime) {
+        startTime.classList.add("start_time");
+        timeContainer.appendChild(startTime);
+      } else {
+        return;
+      }
     }
 
     if (task.end_time) {
       const endTime = document.createElement("span");
+      endTime.textContent = task.end_time;
+      const [endHourStr, endMnStr] = task.end_time.split(":");
+      const endMnTotal = parseInt(endHourStr) * 60 + parseInt(endMnStr);
+
+      if (endMnTotal < currentTime) {
+        taskDiv.classList.add("failed");
+        console.log(task.penelty_id);
+        if (!task.completed && task.penelty_id == null) {
+          let data = await markTaskAsFailed(task.task_id);
+          // console.log(data);
+        }
+      }
+
       endTime.classList.add("end_time");
       endTime.textContent = task.end_time;
       timeContainer.appendChild(endTime);
@@ -142,4 +169,8 @@ export function updateTaskFromDOM(task) {
       task.coin_reward;
     taskElement.querySelector(".xp_container h1").textContent = task.xp_reward;
   }
+}
+
+for (const task of tasks) {
+  addTaskToDOM(task);
 }

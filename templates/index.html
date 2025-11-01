@@ -56,6 +56,7 @@
       let nextLevelXP = {{ user.xp_to_next_level | tojson }};
       let currentLevel = {{ user.level | tojson }};
       let current_coins  = {{ user.coins | tojson }};
+      let tasks = {{ tasks | tojson }};
     </script>
 
     <script
@@ -145,55 +146,7 @@
         </div>
       </div>
 
-      <div id="tasks_container">
-        {% for task in tasks %}
-        <div
-          class="task {% if task.completed %} completed {% elif task.failed %} failed {% endif %}"
-          id="{{ task.task_id }}"
-        >
-          <label class="task_label">
-            <input
-              type="checkbox"
-              class="task_checkbox"
-              {%
-              if
-              task.completed
-              %}checked{%
-              endif
-              %}
-            />
-            <span class="task_text">{{ task.task_name }}</span>
-
-            {% if task.start_time or task.end_time %}
-            <div class="time_container">
-              {% if task.start_time %}
-              <span class="start_time">{{ task.start_time }}</span>
-              {% endif %} {% if task.end_time %}
-              <span class="end_time">{{ task.end_time }}</span>
-              {% endif %}
-            </div>
-            {% endif %}
-
-            <div class="reward_container">
-              <div class="coin_container">
-                <img
-                  class="coin_icon"
-                  src="{{ url_for('static', filename='images/icons/coin.png') }}"
-                />
-                <h1>{{ task.coin_reward }}</h1>
-              </div>
-              <div class="xp_container">
-                <img
-                  class="coin_icon"
-                  src="{{ url_for('static', filename='images/icons/coin.png') }}"
-                />
-                <h1>{{ task.xp_reward }}</h1>
-              </div>
-            </div>
-          </label>
-        </div>
-        {% endfor %}
-      </div>
+      <div id="tasks_container"></div>
 
       <!-- Add Task Button -->
       <button id="add_task_btn" onclick="switch_window('add_task_window')">

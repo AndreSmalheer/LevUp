@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from urllib.parse import unquote
 import sqlite3
 from database.db import get_connection
-from database.task_queries import delete_task_from_db, get_punishment
+from database.task_queries import delete_task_from_db, get_punishment, mark_task_failed
 from database.user_queries import get_user
 from database.task_queries import get_tasks
 from database.user_queries import get_user
@@ -223,6 +223,10 @@ def add_punishment_as_task():
 
    return jsonify({"status": "success", "message": "punishment added!", "punishment": punishment_dict})
 
+@tasks_bp.route("/mark_task_failed/<task_id>", methods=['POST'])
+def mark_task_failed_route(task_id):
+    mark_task_failed(task_id)
+    return jsonify({"status": "ok", "message": f"Task {task_id} marked as failed"})
    
 @tasks_bp.route("/getTaskDetails/<task_id>", methods=['POST'])
 def getTaskDetails(task_id):

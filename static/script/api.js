@@ -71,3 +71,15 @@ export async function add_punishment_as_task(punishment) {
     console.error("Error:", err);
   }
 }
+export async function markTaskAsFailed(taskID) {
+  const url = `mark_task_failed/${encodeURIComponent(taskID)}`;
+
+  try {
+    const res = await fetch(url, { method: "POST" });
+    if (!res.ok) throw new Error("Request failed: " + res.status);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("Error:", err);
+  }
+}
