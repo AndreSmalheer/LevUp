@@ -62,7 +62,6 @@ export async function addTaskToDOM(task) {
         console.log(task.penelty_id);
         if (!task.completed && task.penelty_id == null) {
           let data = await markTaskAsFailed(task.task_id);
-          // console.log(data);
         }
       }
 
@@ -139,7 +138,7 @@ export function removeTaskFromDOM(taskID) {
   }
 }
 
-export function updateTaskFromDOM(task) {
+export async function updateTaskFromDOM(task) {
   let taskID = task.task_id;
   const taskContainer = document.getElementById("tasks_container");
 
@@ -150,7 +149,43 @@ export function updateTaskFromDOM(task) {
     return;
   }
 
-  // console.log(task);
+  if (task.start_time || task.end_time) {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMn = now.getMinutes();
+    const currentTime = currentHour * 60 + currentMn;
+
+    if (task.start_time) {
+      const start_time = task.start_time;
+      const [startHourStr, startMnStr] = start_time.split(":");
+
+      const startMnTotal = parseInt(startHourStr) * 60 + parseInt(startMnStr);
+
+      if (!startMnTotal < currentTime) {
+        taskElement.style.display = "none";
+        return;
+      }
+    }
+
+    if (task.end_time) {
+      const end_time = task.end_time;
+
+      const [endHourStr, endMnStr] = end_time.split(":");
+
+      const endMnTotal = parseInt(endHourStr) * 60 + parseInt(endMnStr);
+
+      if (endMnTotal < currentTime) {
+        if (!task.completed && task.penelty_id == null) {
+          let data = await markTaskAsFailed(task.task_id);
+
+          taskContainer
+            .querySelector(`.task[id="${taskID}"]`)
+            .classList.add("failed");
+        }
+      }
+    }
+  }
+
   const startTimeElem = taskElement.querySelector(".start_time");
   const endTimeElem = taskElement.querySelector(".end_time");
 
