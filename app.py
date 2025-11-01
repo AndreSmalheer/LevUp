@@ -14,38 +14,41 @@ scheduler = APScheduler()
 
 def reset_tasks():
     tasks = get_tasks()
+    new_tasks = [] 
 
-    for task  in tasks:
+    for task in tasks:
         repeat_days = task['repeat_days']
+        completed = task['completed']
+        failed = task['failed']
 
         if repeat_days:
-            completed = task['completed']
-            failed = task['failed']
+            if not completed and not failed:
+                mark_task_failed(task['task_id'])
 
-            if completed != True:
-                if not failed:
-                 mark_task_failed(task['task_id'])
+                conn = get_connection()
+                user = get_user()
+                task_name = task['task_name']
+                coin_reward = task['coin_reward']
+                xp_reward = task['xp_reward']
+                start_time = task['start_time']
+                end_time = task['end_time']
+                repeat_days_list = repeat_days.split(",") if repeat_days else []
+                repeat_days_str = ",".join(repeat_days_list) if repeat_days_list else None
 
-                 conn = get_connection()
-                 user = get_user()
-                 task_name = task['task_name']
-                 coin_reward = task['coin_reward']
-                 xp_reward = task['xp_reward']
-                 start_time = task['start_time']
-                 end_time = task['end_time']
-                 repeat_days_str = ",".join(repeat_days) if repeat_days else None
-                 insert_task(conn, user["id"], task_name, coin_reward, xp_reward, start_time, end_time, repeat_days_str)
+                new_task_id = insert_task(conn, user["id"], task_name, coin_reward, xp_reward, start_time, end_time, repeat_days_str)
+
+                for t in get_tasks():
+                    if t['task_id'] == new_task_id:
+                        new_tasks.append(t)
+                        break
 
         else:
-            completed = task['completed']
-            failed = task['failed']
-
             if completed:
-             delete_task_from_db(task['task_id'])
-            else:
-                if not failed:
-                    mark_task_failed(task['task_id'])
+                delete_task_from_db(task['task_id'])
+            elif not failed:
+                mark_task_failed(task['task_id'])
 
+    tasks.extend(new_tasks)
  
 # def daily_task():
 #     print(f"Task running at {datetime.now()}")
@@ -73,6 +76,7 @@ def home():
     return render_template('index.html', user=user, tasks=tasks)
 
 if __name__ == '__main__':
+    reset_tasks()
     app.run(host="0.0.0.0", port=5000, debug=True)
 
     
