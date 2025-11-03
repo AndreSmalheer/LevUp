@@ -47,6 +47,7 @@ export function add_coins(amount) {
 
 function load_user_data(level, xp, coins, xpNeeded, user_name) {
   if (user_name == "none") {
+    user_data = false;
     console.warn("No user data found.");
     return;
   }

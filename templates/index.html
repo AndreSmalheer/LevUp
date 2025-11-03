@@ -52,6 +52,7 @@
     />
 
     <script>
+      let user_data = true;
       let currentXP = {{ (user.xp | default(0)) | tojson }};
       let nextLevelXP = {{ (user.xp_to_next_level | default(0)) | tojson }};
       let currentLevel = {{ (user.level | default(0)) | tojson }};
