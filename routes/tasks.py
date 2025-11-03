@@ -12,7 +12,6 @@ from helpers.task_helpers import (
 )
 
 tasks_bp = Blueprint('tasks', __name__)
-user = get_user()
 
 # ----------------- Complete Task -----------------
 @tasks_bp.route("/completed_task/<name>", methods=["POST"])
@@ -78,6 +77,8 @@ def uncomplete_task(name):
 # ----------------- Add Task -----------------
 @tasks_bp.route('/add_task', methods=['POST'])
 def add_task():
+    user = get_user()
+
     task_name = request.form.get('task_name')
     coin_reward = request.form.get('coin_reward')
     xp_reward = request.form.get('xp_reward')
@@ -129,6 +130,8 @@ def add_punishment_as_task():
 # ----------------- Update Task -----------------
 @tasks_bp.route("/update_task/<task_id>", methods=['POST'])
 def update_task(task_id):
+    user = get_user()
+    
     task_name = request.form.get('task_name')
     coin_reward = request.form.get('coin_reward')
     xp_reward = request.form.get('xp_reward')
