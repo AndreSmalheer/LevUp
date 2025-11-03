@@ -51,17 +51,30 @@
       href="{{ url_for('static', filename='styles/windows/penelty_window.css') }}"
     />
 
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/windows/add_user_window.css') }}"
+    />
+
+
     <script>
-      let currentXP = {{ user.xp | tojson }};
-      let nextLevelXP = {{ user.xp_to_next_level | tojson }};
-      let currentLevel = {{ user.level | tojson }};
-      let current_coins  = {{ user.coins | tojson }};
-      let tasks = {{ tasks | tojson }};
+      let user_data = true;
+      let currentXP = {{ (user.xp | default(0)) | tojson }};
+      let nextLevelXP = {{ (user.xp_to_next_level | default(0)) | tojson }};
+      let currentLevel = {{ (user.level | default(0)) | tojson }};
+      let current_coins = {{ (user.coins | default(0)) | tojson }};
+      let tasks = {{ (tasks | default([])) | tojson }};
+      let user_name = {{ (user.name | default("none")) | tojson }};
     </script>
 
     <script
       type="module"
       src="{{ url_for('static', filename='script/system.js') }}"
+      defer
+    ></script>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='script/windows/add_user_window.js') }}"
       defer
     ></script>
     <script
@@ -123,14 +136,14 @@
 
     <div id="system_container" class="system-window">
       <div id="status_container">
-        <h1 id="name">{{ user.name }}</h1>
+        <h1 id="name"></h1>
         <div id="level_coin_container">
           <div id="level_container">
-            <h1>{{ user.level }}</h1>
+            <h1></h1>
             <h2>Level</h2>
           </div>
           <div id="coin_container">
-            <h1>{{ user.coins }}</h1>
+            <h1></h1>
             <h2>Coins</h2>
           </div>
         </div>
@@ -140,9 +153,9 @@
         </div>
 
         <div id="progress_texts">
-          <span id="current_xp">{{ user.xp }}</span>
+          <span id="current_xp"></span>
           <span id="xp_label">XP</span>
-          <span id="xp_needed">{{ user.xp_to_next_level }}</span>
+          <span id="xp_needed">20</span>
         </div>
       </div>
 
@@ -152,6 +165,18 @@
       <button id="add_task_btn" onclick="switch_window('add_task_window')">
         +
       </button>
+    </div>
+
+    <div id="add_user_window" class="system-window">
+      <div id="welcome_message_container">
+       <h1 id="welcome_message">Welcome new User</h1>
+      </div>
+
+      <form class="system-from" id="add_user_form">
+        <label for="user_name">User name</label>
+        <input type="text" id="user_name" name="user_name" value="User" />
+        <input type="submit" value="Submit" />
+      </form>
     </div>
 
     <div id="add_task_window" class="system-window">

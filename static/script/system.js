@@ -71,7 +71,11 @@ document.addEventListener(
   "click",
   () => {
     document.getElementById("activate_msg").style.display = "none";
-    show_window("system_container");
+    if (user_data) {
+      show_window("system_container");
+    } else {
+      show_window("add_user_window")
+    }
   },
   { once: true }
 );
