@@ -59,7 +59,7 @@ export function switch_window(new_windowId) {
   hide_window(current_window);
 }
 
-function hide_current_window() {
+export function hide_current_window() {
   if (current_window != null) {
     hide_window(current_window);
   } else {

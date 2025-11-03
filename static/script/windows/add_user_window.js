@@ -1,4 +1,4 @@
-import { switch_window } from "../system.js";
+import { switch_window, hide_current_window } from "../system.js";
 import { load_user_data } from "../status.js";
 
 document
@@ -10,7 +10,7 @@ document
 
     fetch("/create_user/" + userName)
       .then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
         load_user_data(
           data.data.level,
           data.data.xp,
@@ -18,7 +18,12 @@ document
           data.data.xp_to_next_level,
           data.data.name
         );
-        switch_window("system_container");
+
+        hide_current_window();
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       })
       .catch((error) => {
         console.error("Error:", error);
