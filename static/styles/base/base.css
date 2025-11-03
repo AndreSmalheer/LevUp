@@ -59,7 +59,40 @@ body {
   color: white;
   border: none;
   cursor: pointer;
-  position: fixed; /* if you want floating at bottom-right */
+  position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+
+#settings_icon{
+  top: 10px;
+  left: 10px;
+  position: absolute;
+}
+
+#settings_icon img{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: block;
+  transform-origin: center;
+  will-change: transform;
+  
+  backface-visibility: hidden;      
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+#settings_icon:hover{
+  transform: scale(1.1);    
+}
+
+#settings_icon:hover img{
+  animation: spin 0.41s linear;
+}
+
+@keyframes spin{
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
