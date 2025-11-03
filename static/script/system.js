@@ -74,7 +74,7 @@ document.addEventListener(
     if (user_data) {
       show_window("system_container");
     } else {
-      return;
+      show_window("add_user_window")
     }
   },
   { once: true }
