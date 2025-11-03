@@ -74,6 +74,11 @@
     ></script>
     <script
       type="module"
+      src="{{ url_for('static', filename='script/windows/add_user_window.js') }}"
+      defer
+    ></script>
+    <script
+      type="module"
       src="{{ url_for('static', filename='script/status.js') }}"
       defer
     ></script>
@@ -162,7 +167,17 @@
       </button>
     </div>
 
-    <div id="add_user_window" class="system-window"><h1 id="welcome_message">Welcome new User</h1></div>
+    <div id="add_user_window" class="system-window">
+      <div id="welcome_message_container">
+       <h1 id="welcome_message">Welcome new User</h1>
+      </div>
+
+      <form class="system-from" id="add_user_form">
+        <label for="user_name">User name</label>
+        <input type="text" id="user_name" name="user_name" value="User" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
 
     <div id="add_task_window" class="system-window">
       <div class="back-btn" onclick="switch_window('system_container')"></div>

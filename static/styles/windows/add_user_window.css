@@ -1,5 +1,10 @@
+#welcome_message_container{
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
 #welcome_message{
-    align-self: center;
     margin: 0;
     line-height: 1.4;
     max-width: 25vw;

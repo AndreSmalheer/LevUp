@@ -2,6 +2,33 @@
 
 from database.db import get_connection  
 
+def add_user(name):
+    default_stats = {
+        "level": 1,
+        "coins": 0,
+        "xp": 0,
+        "xp_to_next_level": 100
+    }
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO users (name) VALUES (?)", (name,))
+    user_id = cursor.lastrowid
+    cursor.execute(
+        "INSERT INTO character_stats (user_id, level, coins, xp, xp_to_next_level) VALUES (?, ?, ?, ?, ?)",
+        (user_id, default_stats["level"], default_stats["coins"], default_stats["xp"], default_stats["xp_to_next_level"])
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    data = {
+        "id": user_id,
+        "name": name,
+        **default_stats
+    }
+    return {"status": "success", "data": data}
+
 def get_user():
     conn = get_connection()
     cursor = conn.cursor()
