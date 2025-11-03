@@ -17,6 +17,10 @@ export function initCheckboxes() {
         return;
       }
 
+      if (taskContainer.classList.contains("scheduled")) {
+        return;
+      }
+
       if (!taskContainer.classList.contains("failed")) {
         if (checkbox.checked) {
           taskContainer.classList.add("completed");
