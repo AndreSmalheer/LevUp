@@ -1,5 +1,5 @@
 // Action.js
-export class Action {
+export class ActionItem {
   constructor({
     label,
     checkbox = false,
@@ -8,6 +8,7 @@ export class Action {
     popupData = [],
     coin_reward = 0,
     xp_reward = 0,
+    container_id = "tasks_container",
   }) {
     this.label = label;
     this.checkbox = checkbox;
@@ -16,12 +17,13 @@ export class Action {
     this.popupData = popupData;
     this.coin_reward = coin_reward;
     this.xp_reward = xp_reward;
+    this.container_id = container_id;
 
     this.actionDiv = null;
     this.labelSpan = null;
   }
 
-  create(containerId = "tasks_container") {
+  create(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -159,7 +161,7 @@ function dryDishes() {
   console.log("Drying dishes...");
 }
 
-const action = new Action({
+const action = new ActionItem({
   label: "Do the dishes",
   checkbox: true,
   popup: true,
