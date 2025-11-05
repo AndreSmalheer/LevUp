@@ -8,7 +8,7 @@ export class ActionItem {
     popupData = [],
     coin_reward = 0,
     xp_reward = 0,
-    container_id = "tasks_container",
+    containerId = "tasks_container",
   }) {
     this.label = label;
     this.checkbox = checkbox;
@@ -17,14 +17,14 @@ export class ActionItem {
     this.popupData = popupData;
     this.coin_reward = coin_reward;
     this.xp_reward = xp_reward;
-    this.container_id = container_id;
+    this.containerId = containerId;
 
     this.actionDiv = null;
     this.labelSpan = null;
   }
 
-  create(containerId) {
-    const container = document.getElementById(containerId);
+  create() {
+    const container = document.getElementById(this.containerId);
     if (!container) return;
 
     this.actionDiv = document.createElement("div");
@@ -172,9 +172,10 @@ const action = new ActionItem({
   ],
 });
 
-const action_2 = new Action({
-  label: "Do the dishes",
-});
+// example
+// const action_2 = new ActionItem({
+//   label: "Do the dishes",
+// });
 
-action.create();
-action_2.create();
+// action.create();
+// action_2.create();
