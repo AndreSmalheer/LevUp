@@ -39,10 +39,6 @@ function handlePopUpAction(action, activeTask, popUp) {
   popUp.classList.remove("active");
 }
 
-function handleConsequenceAction(action, activeConsequence, popUp) {
-  return;
-}
-
 function updateTaskPopUp(popUp, task) {
   // Save original content if not already saved
   if (!popUp.dataset.original) {
@@ -71,24 +67,12 @@ function updateTaskPopUp(popUp, task) {
   return true; // indicate popup is available
 }
 
-function updateConsequencePopUp(popUp, consequence) {
-  // Save original content if not already saved
-  if (!popUp.dataset.original) {
-    popUp.dataset.original = popUp.innerHTML;
-  }
-
-  // Set popup content for consequences
-  popUp.innerHTML = `
-    <ul>
-      <li>Edit Consequence</li>
-      <li>Delete Consequence</li>
-    </ul>
-  `;
-
-  return true;
-}
-
-function attachPopUpListeners(elements, popUp, updateFunction, handleFunction) {
+export function attachPopUpListeners(
+  elements,
+  popUp,
+  updateFunction,
+  handleFunction
+) {
   if (!popUp) {
     console.warn("Popup element not found for these elements:", elements);
     return; // stop here if popup not in DOM
@@ -138,16 +122,4 @@ export function initTaskPopUps() {
     attachPopUpListeners(tasks, popUp, updateTaskPopUp, handlePopUpAction);
 }
 
-export function initConsequencePopUps() {
-  const consequences = document.querySelectorAll(".consequence");
-  const popUp = document.querySelector(".task-pop-up");
-  attachPopUpListeners(
-    consequences,
-    popUp,
-    updateConsequencePopUp,
-    handleConsequenceAction
-  );
-}
-
 initTaskPopUps();
-initConsequencePopUps();

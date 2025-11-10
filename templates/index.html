@@ -83,6 +83,11 @@
     ></script>
     <script
       type="module"
+      src="{{ url_for('static', filename='script/concecenses.js') }}"
+      defer
+    ></script>
+    <script
+      type="module"
       src="{{ url_for('static', filename='script/windows/settings.js') }}"
       defer
     ></script>
@@ -192,20 +197,19 @@
 
       <div id="tasks_container"></div>
 
-      <div id="consequences_container">
-        <div class="consequence">
-          <label class="consequence_label">
-            <span class="consequence_text">Test</span>
-          </label>
-        </div>
-      </div>
+      <div id="consequences_container"></div>
 
       <!-- Add Task Button -->
       <button id="add_task_btn" onclick="switch_window('add_task_window')">
         +
       </button>
 
-      <button id="add_consequence_btn">+</button>
+      <button
+        id="add_consequence_btn"
+        onclick="switch_window('add_consequence_window')"
+      >
+        +
+      </button>
     </div>
 
     <div id="add_user_window" class="system-window">
@@ -284,6 +288,29 @@
             Sunday</label
           >
         </fieldset>
+
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+
+    <div id="add_consequence_window" class="system-window">
+      <div class="back-btn" onclick="switch_window('system_container')"></div>
+      <form class="system-from" id="add_consequence_form">
+        <label for="consequence_name">Consequence name</label>
+        <input
+          type="text"
+          id="consequence_name"
+          name="consequence_name"
+          value="Consequence"
+        />
+
+        <label for="consequence_description">Description</label>
+        <input
+          type="text"
+          id="consequence_description"
+          name="consequence_description"
+          value="Description"
+        />
 
         <input type="submit" value="Submit" />
       </form>

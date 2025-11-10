@@ -1,5 +1,5 @@
 import { updateRewards } from "./taskRewards.js";
-import { initTaskPopUps, initConsequencePopUps } from "./taskPopups.js";
+import { initTaskPopUps } from "./taskPopups.js";
 import { initCheckboxes } from "./taskCheckboxes.js";
 import { markTaskAsFailed } from "../api.js";
 
@@ -170,34 +170,6 @@ export async function addTaskToDOM(task) {
   initTaskPopUps();
   initCheckboxes();
 }
-
-function addConsequenceToDom(consequenceText) {
-  const consequencesContainer = document.getElementById(
-    "consequences_container"
-  );
-
-  // Create wrapper div
-  const consequenceDiv = document.createElement("div");
-  consequenceDiv.classList.add("consequence");
-
-  // Create label
-  const label = document.createElement("label");
-  label.classList.add("consequence_label");
-
-  // Create text span
-  const span = document.createElement("span");
-  span.classList.add("consequence_text");
-  span.textContent = consequenceText;
-
-  // Build structure
-  label.appendChild(span);
-  consequenceDiv.appendChild(label);
-  consequencesContainer.appendChild(consequenceDiv);
-
-  initConsequencePopUps();
-}
-
-addConsequenceToDom("Late submission penalty");
 
 export function removeTaskFromDOM(taskID) {
   // Find all task elements
