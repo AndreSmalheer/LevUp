@@ -39,6 +39,10 @@ body {
   display: none;
 }
 
+#add_user_window {
+  padding-top: 20px;
+}
+
 .system-window.active {
   display: block;
   animation: openSystem 0.8s cubic-bezier(0.25, 1.2, 0.5, 1) forwards;
