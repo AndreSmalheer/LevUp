@@ -1,7 +1,7 @@
 <!-- prettier-ignore -->
 <div id="{{ window_id }}" class="system-window">
   {% if show_back_btn %}
-    <div class="back-btn" onclick="switch_window('system_container')"></div>
+    <div class="back-btn" onclick="switch_to_main_window()"></div>
   {% endif %}
 
   <form class="system-from" id="{{ form_id }}">
@@ -40,16 +40,19 @@
   </form>
 </div>
 
-<script>
+<script type="module">
+  import { hide_current_window } from "{{ url_for('static', filename='script/system_windows.js') }}";
+
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("{{ form_id }}");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      console.log("Submitting form:", form.id);
+
       const formData = new FormData(form);
 
-      // send to generic backend route
       const response = await fetch("/api/add", {
         method: "POST",
         body: formData,
@@ -57,6 +60,11 @@
 
       const result = await response.json();
       console.log(result);
+
+      if (form.id == "add_user_form") {
+        hide_current_window();
+        location.reload();
+      }
     });
   });
 </script>

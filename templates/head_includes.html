@@ -9,6 +9,14 @@
   let user_name = {{ (user.name | default("none")) | tojson }};
 </script>
 
+<script type="module">
+  import { switch_window } from "{{ url_for('static', filename='script/system_windows.js') }}";
+  window.switch_window = switch_window;
+
+  import { switch_to_main_window } from "{{ url_for('static', filename='script/system_windows.js') }}";
+  window.switch_to_main_window = switch_to_main_window;
+</script>
+
 <script
   type="module"
   src="{{ url_for('static', filename='script/system_windows.js') }}"
