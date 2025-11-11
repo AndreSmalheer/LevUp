@@ -116,12 +116,59 @@ def add_item():
 
     return jsonify({"status": "Failed", "message": "Data type does not match"})
 
-@app.route("/api/update", methods=["GET"])
+@app.route("/api/update", methods=["POST"])
 def update_item():
-    data_type = request.form.get("type")
+    data_type = request.json.get("type") 
 
     if data_type == "update_task":
-        pass
+        task_id = request.json.get("task_id")
+        name = request.json.get("task_name")
+        coin_reward = request.json.get("coin_reward")
+        xp_reward = request.json.get("xp_reward")
+        start_time = request.json.get("start_time")
+        end_time = request.json.get("end_time")
+        completed = request.json.get("completed")
+        failed = request.json.get("failed")
+        repeat_days = request.json.get("repeat_days")
+        repeat_days_string = ",".join(repeat_days) if repeat_days else None
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute('''
+        UPDATE tasks
+        SET task_name = ?, coin_reward = ?, xp_reward = ?, start_time = ?, end_time = ?,
+            completed = ?, failed = ?, repeat_days = ?
+        WHERE id = ?
+        ''', (name, coin_reward, xp_reward, start_time, end_time, completed, failed, repeat_days_string, task_id))
+
+        conn.commit()
+        conn.close()
+
+        return jsonify({"message": "Task updated"}), 200
+    
+    if data_type == "update_user_stats":
+        user_id = request.json.get("user_id")
+        level = request.json.get("level")
+        coins = request.json.get("coins")
+        xp = request.json.get("xp")
+        xp_to_next_level = request.json.get("xp_to_next_level")
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute('''
+        UPDATE character_stats
+        SET level = ?, coins = ?, xp = ?, xp_to_next_level = ?
+        WHERE user_id = ?
+        ''', (level, coins, xp, xp_to_next_level, user_id))
+
+        conn.commit()
+        conn.close()
+
+        return jsonify({"message": "User stats updated"}), 200
+    
+    return jsonify({"status": "Failed", "message": "Data type does not match"})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

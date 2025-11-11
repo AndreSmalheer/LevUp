@@ -145,7 +145,7 @@ class Task {
     task_element.remove();
   }
 
-  update_task({
+  async update_task({
     name = this.name,
     coinReward = this.coinReward,
     expReward = this.expReward,
@@ -181,6 +181,26 @@ class Task {
     xp_container.textContent = expReward;
     start_time_elem.textContent = start_time;
     end_time_elem.textContent = end_time;
+
+    // call api
+    const res = await fetch("/api/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "update_task",
+        task_id: this.task_id,
+        task_name: this.name,
+        coin_reward: this.coinReward,
+        xp_reward: this.expReward,
+        start_time: this.start_time,
+        end_time: this.end_time,
+        completed: this.completed,
+        failed: this.failed,
+        repeat_days: this.repeat_days,
+      }),
+    });
+
+    console.log((await res.json()).message);
 
     // If failed
     if (failed) {
@@ -218,5 +238,5 @@ class Task {
   }
 }
 
-let task = new Task(1, "Sample Task", 100, 2);
+let task = new Task(69, "Sample Task", 100, 2);
 task.add_task();
