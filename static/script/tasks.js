@@ -180,6 +180,8 @@ class Task {
     end_time_elem.textContent = end_time;
 
     if (failed) {
+      this.failed = true;
+      this.task_element.classList.add("failed");
       return;
     }
 
@@ -198,8 +200,7 @@ class Task {
   }
 
   markFailed() {
-    this.failed = true;
-    this.task_element.classList.add("failed");
+    this.update_task({ failed: true });
   }
 
   click() {
