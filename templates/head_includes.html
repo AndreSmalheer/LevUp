@@ -7,6 +7,7 @@
   let current_coins = {{ (user.coins | default(0)) | tojson }};
   let tasks = {{ (tasks | default([])) | tojson }};
   let user_name = {{ (user.name | default("none")) | tojson }};
+  let user_id = {{ (user.id | default(0)) | tojson }};
 </script>
 
 <script type="module">
