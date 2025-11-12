@@ -24,7 +24,7 @@ export class Task {
     this.task_element = document.getElementById(this.task_id) ?? null;
   }
 
-  async add_task() {
+  dom_add_task() {
     const tasksContainer = document.getElementById("tasks_container");
 
     // Create task wrapper
@@ -140,7 +140,7 @@ export class Task {
     // initCheckboxes();
   }
 
-  remove_task() {
+  dom_remove_task() {
     let task_element = document.getElementById(this.task_id);
     task_element.remove();
   }
@@ -270,7 +270,7 @@ for (const task of tasks) {
     task.failed,
     task.repeat_days
   );
-  t.add_task();
+  t.dom_add_task();
   tasksMap.set(task.task_id, t);
 }
 
