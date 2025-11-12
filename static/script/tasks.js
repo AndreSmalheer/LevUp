@@ -1,5 +1,52 @@
 import { add_xp, remove_xp, set_xp } from "./progress.js";
 
+class PopUp {
+  constructor(id, items, x, y) {
+    this.id = id;
+    this.items = items;
+    this.x = x;
+    this.y = y;
+  }
+  create() {
+    const popUp = document.createElement("div");
+    popUp.className = "pop-up";
+    popUp.id = this.id;
+
+    popUp.textContent = this.textContent;
+    popUp.classList.add("hide");
+
+    if (this.items.length > 0) {
+      const ul = document.createElement("ul");
+      for (let item of this.items) {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      }
+      popUp.appendChild(ul);
+    }
+
+    document.body.appendChild(popUp);
+    this.element = popUp;
+  }
+
+  show(x, y) {
+    this.element.style.left = x + "px";
+    this.element.style.top = y + "px";
+
+    this.element.classList.remove("hide");
+    this.element.classList.add("show");
+  }
+
+  hide() {
+    this.element.classList.remove("show");
+    this.element.classList.add("hide");
+  }
+}
+
+// example
+// const myPopup = new PopUp("myPopup", ["Option 1", "Option 2"]);
+// myPopup.create();
+
 export class Task {
   constructor(
     task_id,
