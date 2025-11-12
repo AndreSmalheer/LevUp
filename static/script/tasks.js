@@ -236,6 +236,7 @@ export class Task {
       .then((data) => {
         this.task_id = data.task.task_id;
         this.dom_add_task();
+        tasksMap.set(this.task_id, this);
       });
   }
 
@@ -315,6 +316,8 @@ export class Task {
     });
 
     console.log((await res.json()).message);
+
+    tasksMap.set(this.task_id, this);
 
     // If failed
     if (failed) {
