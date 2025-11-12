@@ -39,9 +39,8 @@
     <input type="submit" value="{{ submit_text | default('Submit') }}" />
   </form>
 </div>
-
 <script type="module">
-  import { hide_current_window } from "{{ url_for('static', filename='script/system_windows.js') }}";
+  import { Task } from "{{ url_for('static', filename='script/tasks.js') }}";
   import { switch_to_main_window } from "{{ url_for('static', filename='script/system_windows.js') }}";
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -50,23 +49,48 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      console.log("Submitting form:", form.id);
-
-      const formData = new FormData(form);
-
-      const response = await fetch("/api/add", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-      console.log(result);
-
-      switch_to_main_window();
-
-      if (form.id == "add_user_form") {
-        location.reload();
+      if (form.id === "add_user_form") {
+        await handleUserForm(form);
+      } else if (form.id === "add_task_form") {
+        await handleTaskForm(form);
       }
     });
   });
+
+  async function handleUserForm(form) {
+    const formData = new FormData(form);
+    const response = await fetch("/api/add", {
+      method: "POST",
+      body: formData,
+    });
+    const result = await response.json();
+    console.log("User form result:", result);
+    switch_to_main_window();
+    location.reload();
+  }
+
+  async function handleTaskForm(form) {
+    const task_name = document.getElementById("task_name").value;
+    const coin_reward = parseInt(document.getElementById("coin_reward").value);
+    const xp_reward = parseInt(document.getElementById("xp_reward").value);
+    const start_time = document.getElementById("start_time").value;
+    const end_time = document.getElementById("end_time").value;
+    const repeatDays = Array.from(
+      document.querySelectorAll('input[name="repeat_days"]:checked')
+    ).map((checkbox) => checkbox.value);
+
+    const new_task = new Task(
+      null,
+      task_name,
+      coin_reward,
+      xp_reward,
+      start_time,
+      end_time,
+      false,
+      false,
+      repeatDays
+    );
+    new_task.add_task();
+    switch_to_main_window();
+  }
 </script>
