@@ -30,6 +30,7 @@ class PopUp {
   }
 
   show(x, y) {
+    console.log(this.currentTaskId);
     this.element.style.left = x + "px";
     this.element.style.top = y + "px";
 
@@ -42,10 +43,6 @@ class PopUp {
     this.element.classList.add("hide");
   }
 }
-
-// example
-// const myPopup = new PopUp("myPopup", ["Option 1", "Option 2"]);
-// myPopup.create();
 
 export class Task {
   constructor(
@@ -81,6 +78,12 @@ export class Task {
 
     taskDiv.addEventListener("click", () => {
       this.click();
+    });
+
+    taskDiv.addEventListener("contextmenu", (e) => {
+      taskPopUp.currentTaskId = this.task_id;
+      taskPopUp.show(e.pageX, e.pageY);
+      e.preventDefault();
     });
 
     if (this.completed) {
@@ -343,6 +346,9 @@ export class Task {
     }
   }
 }
+
+const taskPopUp = new PopUp("task_popup", ["Option 1", "Option 2"]);
+taskPopUp.create();
 
 const tasksMap = new Map();
 
