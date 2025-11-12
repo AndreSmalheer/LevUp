@@ -67,7 +67,8 @@ def home():
 
 @app.route("/api/add", methods=["POST"])
 def add_item():
-    data_type = request.form.get("type")
+    data = request.get_json(silent=True) or request.form
+    data_type = data.get("type")
 
     print(f"Adding new item of type: {data_type}")
 
@@ -104,36 +105,43 @@ def add_item():
         }
     
     if data_type == "add_task":
-        user = get_user()
-        user_id = user["id"]
+       data = request.get_json(silent=True) or request.form
 
-        task_name = request.form.get('task_name')
-        coin_reward = request.form.get('coin_reward')
-        xp_reward = request.form.get('xp_reward')
-        start_time = request.form.get('start_time') or None
-        end_time = request.form.get('end_time') or None
-        repeat_days = request.form.getlist('repeat_days') or []
-        repeat_days_str = ",".join(repeat_days) if repeat_days else None
+       user = get_user()
+       user_id = user["id"]
 
-        cursor.execute('''
-        INSERT INTO tasks (user_id, task_name, coin_reward, xp_reward, start_time, end_time, repeat_days)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (user_id, task_name, coin_reward, xp_reward, start_time, end_time, repeat_days_str))
-        task_id = cursor.lastrowid
-        conn.commit()
-        cursor.close()
+       task_name = data.get("task_name")
+       coin_reward = data.get("coin_reward")
+       xp_reward = data.get("xp_reward")
+       start_time = data.get("start_time") or None
+       end_time = data.get("end_time") or None
 
-        task_dict = {
-        "task_id": task_id,
-        "task_name": task_name,
-        "coin_reward": coin_reward,
-        "xp_reward": xp_reward,
-        "start_time": start_time,
-        "end_time": end_time,
-        "repeat_days": repeat_days
-        }
+       # Handle repeat_days properly for both JSON and form
+       if isinstance(data.get("repeat_days"), list):
+           repeat_days = data.get("repeat_days")
+       else:
+           repeat_days = request.form.getlist("repeat_days") or []
+       repeat_days_str = ",".join(repeat_days) if repeat_days else None
 
-        return jsonify({"status": "success", "message": "Task added!", "task": task_dict})
+       cursor.execute('''
+           INSERT INTO tasks (user_id, task_name, coin_reward, xp_reward, start_time, end_time, repeat_days)
+           VALUES (?, ?, ?, ?, ?, ?, ?)
+       ''', (user_id, task_name, coin_reward, xp_reward, start_time, end_time, repeat_days_str))
+       task_id = cursor.lastrowid
+       conn.commit()
+       cursor.close()
+
+       task_dict = {
+           "task_id": task_id,
+           "task_name": task_name,
+           "coin_reward": coin_reward,
+           "xp_reward": xp_reward,
+           "start_time": start_time,
+           "end_time": end_time,
+           "repeat_days": repeat_days
+       }
+
+       return jsonify({"status": "success", "message": "Task added!", "task": task_dict})
 
     return jsonify({"status": "Failed", "message": "Data type does not match"})
 

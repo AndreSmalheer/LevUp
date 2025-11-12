@@ -145,6 +145,29 @@ export class Task {
     task_element.remove();
   }
 
+  add_task() {
+    fetch("/api/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "add_task",
+        task_name: this.name,
+        coin_reward: this.coinReward,
+        xp_reward: this.expReward,
+        start_time: this.start_time,
+        end_time: this.end_time,
+        repeat_days: this.repeat_days,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.task_id = data.task.task_id;
+        this.dom_add_task();
+      });
+  }
+
+  remove_task() {}
+
   async update_task({
     name = this.name,
     coinReward = this.coinReward,
