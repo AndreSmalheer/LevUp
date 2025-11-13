@@ -1,4 +1,5 @@
 import { add_xp, remove_xp, set_xp } from "./progress.js";
+import { switch_window } from "./system_windows.js";
 
 class PopUp {
   constructor(id, items, x, y) {
@@ -49,14 +50,33 @@ class PopUp {
     this.element.classList.remove("show");
     this.element.classList.add("hide");
   }
+  a;
 
   LiCLick(item) {
     const action = item.toLowerCase();
     if (this.currentItemType == "tasks") {
       const task = tasksMap.get(this.currentItemId);
 
+      console.log(task);
+
       if (action == "edit task") {
-        console.log("showing edit window");
+        let form = document.getElementById("edit_task_form");
+
+        // set form placeholders
+        form.querySelector("#task_name").value = task.name;
+        form.querySelector("#coin_reward").value = task.coinReward;
+        form.querySelector("#xp_reward").value = task.expReward;
+        form.querySelector("#start_time").value = task.start_time;
+        form.querySelector("#end_time").value = task.end_time;
+
+        if (task.repeat_days) {
+          const checkboxes = form.querySelectorAll('input[name="repeat_days"]');
+          checkboxes.forEach((checkbox) => {
+            checkbox.checked = task.repeat_days.includes(checkbox.value);
+          });
+        }
+
+        switch_window("edit_task_window");
       }
 
       if (action == "delete task") {
