@@ -50,19 +50,16 @@ class PopUp {
     this.element.classList.remove("show");
     this.element.classList.add("hide");
   }
-  a;
-
   LiCLick(item) {
     const action = item.toLowerCase();
     if (this.currentItemType == "tasks") {
       const task = tasksMap.get(this.currentItemId);
 
-      console.log(task);
-
       if (action == "edit task") {
         let form = document.getElementById("edit_task_form");
 
         // set form placeholders
+        form.querySelector("#task_id").value = task.task_id;
         form.querySelector("#task_name").value = task.name;
         form.querySelector("#coin_reward").value = task.coinReward;
         form.querySelector("#xp_reward").value = task.expReward;
@@ -289,6 +286,7 @@ export class Task {
     completed = this.completed,
     failed = this.failed,
     repeat_days = this.repeat_days,
+    click = false,
   } = {}) {
     // Update task values
     this.name = name;
@@ -346,38 +344,48 @@ export class Task {
       return;
     }
 
-    // If completed
-    if (completed) {
-      this.task_element.classList.add("completed");
-      this.task_element.classList.remove("failed");
-      status_coin_container.textContent =
-        parseInt(status_coin_container.textContent) + this.coinReward;
-      add_xp(this.expReward);
+    if (click) {
+      // If completed
+      if (completed) {
+        this.task_element.classList.add("completed");
+        this.task_element.classList.remove("failed");
+        status_coin_container.textContent =
+          parseInt(status_coin_container.textContent) + this.coinReward;
+        add_xp(this.expReward);
+      } else {
+        // Not completed
+        this.task_element.classList.remove("completed");
+        status_coin_container.textContent =
+          parseInt(status_coin_container.textContent) - this.coinReward;
+        remove_xp(this.expReward);
+      }
+
+      let current_coins = parseInt(status_coin_container.textContent);
+      let current_xp = document.getElementById("current_xp").textContent;
+
+      const res_2 = await fetch("/api/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "update_user_stats",
+          user_id: user_id,
+          level: currentLevel,
+          coins: current_coins,
+          xp: current_xp,
+          xp_to_next_level: nextLevelXP,
+        }),
+      });
+
+      console.log((await res_2.json()).message);
     } else {
-      // Not completed
-      this.task_element.classList.remove("completed");
-      status_coin_container.textContent =
-        parseInt(status_coin_container.textContent) - this.coinReward;
-      remove_xp(this.expReward);
+      if (completed) {
+        this.task_element.classList.add("completed");
+        this.task_element.classList.remove("failed");
+      } else {
+        // Not completed
+        this.task_element.classList.remove("completed");
+      }
     }
-
-    let current_coins = parseInt(status_coin_container.textContent);
-    let current_xp = document.getElementById("current_xp").textContent;
-
-    const res_2 = await fetch("/api/update", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "update_user_stats",
-        user_id: user_id,
-        level: currentLevel,
-        coins: current_coins,
-        xp: current_xp,
-        xp_to_next_level: nextLevelXP,
-      }),
-    });
-
-    console.log((await res_2.json()).message);
   }
 
   markFailed() {
@@ -386,9 +394,9 @@ export class Task {
 
   click() {
     if (!this.completed) {
-      this.update_task({ completed: true });
+      this.update_task({ completed: true, click: true });
     } else {
-      this.update_task({ completed: false });
+      this.update_task({ completed: false, click: true });
     }
   }
 }

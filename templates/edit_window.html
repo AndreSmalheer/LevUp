@@ -8,6 +8,10 @@
     <!-- hidden type field -->
     <input type="hidden" name="type" value="{{ route_name | default(form_id.replace('_form','')) }}">
 
+    {% if task_id %}
+    <input type="hidden" id="task_id">
+    {% endif %}
+
     <label for="{{ input_name }}">{{ input_label }}</label>
     <input type="text" id="{{ input_name }}" name="{{ input_name }}" value="{{ input_value | default('') }}" />
 
@@ -40,7 +44,10 @@
   </form>
 </div>
 <script type="module">
-  import { Task } from "{{ url_for('static', filename='script/tasks.js') }}";
+  import {
+    Task,
+    tasksMap,
+  } from "{{ url_for('static', filename='script/tasks.js') }}";
   import { switch_to_main_window } from "{{ url_for('static', filename='script/system_windows.js') }}";
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -48,7 +55,30 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      console.log("sumbuited form");
+      if (form.id == "edit_task_form") {
+        const task_id = form.elements["task_id"].value;
+        const task_name = form.elements["task_name"].value;
+        const coin_reward = parseInt(form.elements["coin_reward"].value);
+        const xp_reward = parseInt(form.elements["xp_reward"].value);
+        const start_time = form.elements["start_time"].value;
+        const end_time = form.elements["end_time"].value;
+        const repeatDays = Array.from(
+          form.querySelectorAll('input[name="repeat_days"]:checked')
+        ).map((checkbox) => checkbox.value);
+
+        const task = tasksMap.get(Number(task_id));
+        task.update_task({
+          name: task_name,
+          coinReward: coin_reward,
+          expReward: xp_reward,
+          start_time: start_time,
+          end_time: end_time,
+          completed: task["completed"],
+          failed: task["failed"],
+          repeat_days: repeatDays,
+        });
+        switch_to_main_window();
+      }
     });
   });
 </script>
