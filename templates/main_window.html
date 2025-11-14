@@ -44,9 +44,18 @@
   import {
     switch_to_main_window,
     show_window,
+    switch_window,
   } from "{{ url_for('static', filename='script/system_windows.js') }}";
 
   import { set_xp } from "{{ url_for('static', filename='script/progress.js') }}";
+
+  const settings_icon = document.getElementById("settings_icon")
+  settings_icon.addEventListener(
+    "click",
+    () =>{
+      switch_window("edit_user_settings");
+    }
+  )
 
   function load_user_data(level, xp, coins, xpNeeded, user_name) {
     console.log("Loading user data...");
