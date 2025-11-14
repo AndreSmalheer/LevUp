@@ -81,24 +81,27 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     load_user_data(
-      currentLevel,
-      currentXP,
-      current_coins,
-      nextLevelXP,
-      user_name
+      currentUser.level,
+      currentUser.xp,
+      currentUser.coins,
+      currentUser.xpToNextLevel,
+      currentUser.name
     );
   });
 
   document.addEventListener(
-    "click",
-    () => {
-      document.getElementById("activate_msg").style.display = "none";
-      if (user_data) {
-        switch_to_main_window();
-      } else {
-        show_window("add_user_window");
-      }
-    },
-    { once: true }
-  );
+  "click",
+  () => {
+    const activateMsg = document.getElementById("activate_msg");
+    if (activateMsg) activateMsg.style.display = "none";
+
+    if (currentUser && currentUser.name !== "none") {
+      switch_to_main_window();
+    } else {
+      show_window("add_user_window");
+    }
+  },
+  { once: true }
+);
+
 </script>

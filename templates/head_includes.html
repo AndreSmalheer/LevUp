@@ -1,13 +1,47 @@
 <!-- load varilbe -->
 <script>
-  let user_data = true;
-  let currentXP = {{ (user.xp | default(0)) | tojson }};
-  let nextLevelXP = {{ (user.xp_to_next_level | default(0)) | tojson }};
-  let currentLevel = {{ (user.level | default(0)) | tojson }};
-  let current_coins = {{ (user.coins | default(0)) | tojson }};
-  let tasks = {{ (tasks | default([])) | tojson }};
-  let user_name = {{ (user.name | default("none")) | tojson }};
-  let user_id = {{ (user.id | default(0)) | tojson }};
+  class User {
+      constructor({ id, name, xp = 0, xpToNextLevel = 0, level = 0, coins = 0 }) {
+          this.id = id;
+          this.name = name;
+          this.xp = xp;
+          this.xpToNextLevel = xpToNextLevel;
+          this.level = level;
+          this.coins = coins;
+      }
+
+      async updateUserSettings(newName) {
+        this.name = newName;
+
+        const status = document.getElementById("status_container");
+        const userNameElement = status.querySelector("#name");
+        userNameElement.textContent = currentUser.name;
+
+        const res = await fetch("/api/update", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+           type: "update_user_settings",
+           user_id: this.id,
+           user_name: this.name
+         }),
+        });
+        console.log((await res.json()).message);
+        }
+  }
+
+  // Instantiate the user
+  const currentUser = new User({
+      id: {{ (user.id | default(0)) | tojson }},
+      name: {{ (user.name | default("none")) | tojson }},
+      xp: {{ (user.xp | default(0)) | tojson }},
+      xpToNextLevel: {{ (user.xp_to_next_level | default(0)) | tojson }},
+      level: {{ (user.level | default(0)) | tojson }},
+      coins: {{ (user.coins | default(0)) | tojson }}
+  });
+
+  // Tasks array
+  const tasks = {{ (tasks | default([])) | tojson }};
 </script>
 
 <script type="module">
