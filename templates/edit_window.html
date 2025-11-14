@@ -15,6 +15,7 @@
   
       {# USER EDIT MODE #}
       {% if show_user_name %}
+        <input type="hidden" id="user_id" value="{{ user.id }}">
         <label for="user_name">User name</label>
         <input
           type="text"

@@ -216,6 +216,24 @@ def update_item():
 
         return jsonify({"message": "User stats updated"}), 200
     
+    if data_type == "update_user_settings":
+        new_user_name = request.json.get("user_name")
+        user_id = request.json.get("user_id")
+
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            UPDATE users
+            SET name = ?
+            WHERE id = ?
+        ''', (new_user_name, user_id))
+
+        conn.commit()
+        conn.close()
+
+        return jsonify({"message": "user settings updated"}), 200
+
     return jsonify({"status": "Failed", "message": "Data type does not match"})
 
 if __name__ == '__main__':
