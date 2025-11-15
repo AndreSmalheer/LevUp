@@ -426,9 +426,10 @@ export class Task {
 }
 
 export class Concecenses {
-  constructor(id, name) {
+  constructor(id, name, description) {
     this.id = id;
     this.name = name;
+    this.description = description;
   }
 
   click() {
@@ -480,7 +481,20 @@ export class Concecenses {
   }
 
   add_concecenses() {
-    console.log(`adding concesne with id:${this.id} and name ${this.name}`);
+    fetch("/api/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "add_concecense",
+        concecenses_name: this.name,
+        concecenses_description: this.description,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.concecenses_id = data.concecenses.concecenses_id;
+        this.dom_add_concecenses();
+      });
   }
 
   hide_concecenses() {}

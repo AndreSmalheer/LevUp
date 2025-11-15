@@ -58,6 +58,13 @@ async function handleTaskForm(form) {
 
 async function handleConcecensesForm(form) {
   const concecenses_name = document.getElementById("concecenses_name").value;
-  const new_concecenses = new Concecenses("null", concecenses_name);
+  // const concecenses_description = document.getElementById("").value;
+  let concecenses_description = null;
+  const new_concecenses = new Concecenses(
+    "null",
+    concecenses_name,
+    concecenses_description
+  );
   new_concecenses.add_concecenses();
+  switch_to_main_window();
 }

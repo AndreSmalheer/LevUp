@@ -143,6 +143,28 @@ def add_item():
 
        return jsonify({"status": "success", "message": "Task added!", "task": task_dict})
 
+    if data_type == "add_concecense":
+       data = request.get_json(silent=True) or request.form
+
+       concecenses_name = data.get("concecenses_name")
+       concecenses_description = data.get("concecenses_description")
+
+       cursor.execute('''
+           INSERT INTO concecenses (name, description)
+           VALUES (?, ?)
+       ''', (concecenses_name, concecenses_description))
+       concecenses_id = cursor.lastrowid
+       conn.commit()
+       cursor.close()
+
+       concecenses_dict = {
+         "concecenses_id": concecenses_id,
+         "name": concecenses_name,
+         "description": concecenses_description
+       }
+
+       return jsonify({"status": "success", "message": "concecenses added!", "concecenses": concecenses_dict})
+
     return jsonify({"status": "Failed", "message": "Data type does not match"})
 
 @app.route("/api/remvoe", methods=["POST"])
