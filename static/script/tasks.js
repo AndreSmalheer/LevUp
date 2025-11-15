@@ -476,6 +476,10 @@ export class Concecenses {
     // });
   }
 
+  add_concecenses() {
+    console.log(`adding concesne with id:${this.id} and name ${this.name}`);
+  }
+
   hide_concecenses() {}
 }
 
