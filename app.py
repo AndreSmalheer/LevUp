@@ -78,7 +78,7 @@ def home():
     user = get_user()
     tasks = get_tasks()
     concecenses = get_concecenses()
-    return render_template('index.html', tasks = tasks, user=user, concecenses = concecenses)
+    return render_template('pages/index.html', tasks = tasks, user=user, concecenses = concecenses)
 
 @app.route("/api/add", methods=["POST"])
 def add_item():
