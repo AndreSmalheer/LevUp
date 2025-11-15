@@ -57,13 +57,28 @@ def get_tasks():
     conn.close()
     return tasks
 
+def get_concecenses():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM concecenses")
+    rows = cursor.fetchall()
+    concecenses = [{
+        "concecenses_id": row["concecenses_id"],
+        "name": row["name"],
+        "description": row["description"],
+    } for row in rows]
+    cursor.close()
+    conn.close()
+    return concecenses
+
 app = Flask(__name__)
 
 @app.route('/')
 def home(): 
     user = get_user()
     tasks = get_tasks()
-    return render_template('index.html', tasks = tasks, user=user)
+    concecenses = get_concecenses()
+    return render_template('index.html', tasks = tasks, user=user, concecenses = concecenses)
 
 @app.route("/api/add", methods=["POST"])
 def add_item():
@@ -149,11 +164,13 @@ def add_item():
        concecenses_name = data.get("concecenses_name")
        concecenses_description = data.get("concecenses_description")
 
+       cursor = conn.cursor()
        cursor.execute('''
            INSERT INTO concecenses (name, description)
            VALUES (?, ?)
        ''', (concecenses_name, concecenses_description))
-       concecenses_id = cursor.lastrowid
+       
+       concecenses_id = cursor.lastrowid 
        conn.commit()
        cursor.close()
 

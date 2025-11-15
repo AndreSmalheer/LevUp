@@ -492,7 +492,7 @@ export class Concecenses {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.concecenses_id = data.concecenses.concecenses_id;
+        this.id = data.concecenses.concecenses_id;
         this.dom_add_concecenses();
       });
   }
