@@ -384,6 +384,9 @@ export class Task {
       let current_coins = parseInt(status_coin_container.textContent);
       let current_xp = document.getElementById("current_xp").textContent;
 
+      currentUser.coins = current_coins;
+      currentUser.xp = current_xp;
+
       const res_2 = await fetch("/api/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
