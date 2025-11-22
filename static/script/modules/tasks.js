@@ -154,9 +154,34 @@ export class Task {
     this.repeat_days = repeat_days;
     this.task_id = task_id;
     this.task_element = document.getElementById(this.task_id) ?? null;
+    this.scheduled = false;
+  }
+
+  checkIfScheduled() {
+    const now = new Date();
+
+    if (this.start_time) {
+      const [startHours, startMinutes] = this.start_time.split(":").map(Number);
+      const startTime = new Date();
+      startTime.setHours(startHours, startMinutes, 0, 0);
+      this.scheduled = startTime > now;
+    }
+  }
+
+  checkIfFailed() {
+    const now = new Date();
+
+    if (this.end_time) {
+      const [endHours, endMinutes] = this.end_time.split(":").map(Number);
+      const endTime = new Date();
+      endTime.setHours(endHours, endMinutes, 0, 0);
+      this.failed = endTime < now && !this.completed;
+      this.markFailed();
+    }
   }
 
   dom_add_task() {
+    this.checkIfScheduled();
     const tasksContainer = document.getElementById("tasks_container");
 
     // Create task wrapper
@@ -186,11 +211,13 @@ export class Task {
     // Create label
     const label = document.createElement("label");
     label.classList.add("task_label");
+    label.classList.add("card_label");
 
     // Checkbox
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.classList.add("task_checkbox");
+    checkbox.classList.add("card_checkbox");
     if (this.completed) checkbox.checked = true;
 
     checkbox.addEventListener("click", (event) => {
@@ -277,6 +304,8 @@ export class Task {
     tasksContainer.appendChild(taskDiv);
 
     this.task_element = taskDiv;
+
+    this.checkIfFailed();
 
     // Reinitialize UI functions
     // initTaskPopUps();
@@ -454,10 +483,12 @@ export class Task {
       return;
     }
 
-    if (!this.completed) {
-      this.update_task({ completed: true, click: true });
-    } else {
-      this.update_task({ completed: false, click: true });
+    if (!this.scheduled) {
+      if (!this.completed) {
+        this.update_task({ completed: true, click: true });
+      } else {
+        this.update_task({ completed: false, click: true });
+      }
     }
   }
 }
