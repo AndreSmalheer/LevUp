@@ -1,0 +1,29 @@
+<!-- prettier-ignore -->
+<div id="{{ window_id }}" class="system-window">
+
+  {% if show_back_btn %}
+    <div class="back-btn" onclick="switch_to_main_window()"></div>
+  {% endif %}
+
+  <h1>
+    Because you failed to complete
+    <span id="punishment_task">Task name</span>, You must
+    <span id="punishment">Punisment name</span>
+  </h1>
+
+  <div id="window-actions">
+    <button id="accept-btn" class="system-button" onclick="handleAccept()">Accept</button>
+    <button id="decline-btn" class="system-button" onclick="handleDecline()">Decline</button>
+  </div>
+
+</div>
+
+<script>
+  function handleAccept() {
+    return;
+  }
+
+  function handleDecline() {
+    return;
+  }
+</script>

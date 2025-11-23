@@ -7,6 +7,7 @@
 
 /* Windows */
 @import url("windows/delete_window.css");
+@import url("windows/confirm_penalty_window.css");
 
 /* Components */
 @import url("components/buttons.css");
