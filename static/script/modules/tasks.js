@@ -168,6 +168,7 @@ export class Task {
     end_time = null,
     completed = false,
     failed = false,
+    concecenses_id = null,
     repeat_days = []
   ) {
     this.name = name;
@@ -180,6 +181,7 @@ export class Task {
     this.repeat_days = repeat_days;
     this.task_id = task_id;
     this.task_element = document.getElementById(this.task_id) ?? null;
+    this.concecenses_id = concecenses_id;
     this.scheduled = false;
   }
 
@@ -393,6 +395,7 @@ export class Task {
     end_time = this.end_time,
     completed = this.completed,
     failed = this.failed,
+    consequenceId = this.concecenses_id,
     repeat_days = this.repeat_days,
     click = false,
   } = {}) {
@@ -404,6 +407,7 @@ export class Task {
     this.end_time = end_time;
     this.completed = completed;
     this.failed = failed;
+    this.consequenceId = consequenceId;
     this.repeat_days = repeat_days;
 
     // Get elements
@@ -437,6 +441,7 @@ export class Task {
         end_time: this.end_time,
         completed: this.completed,
         failed: this.failed,
+        penelty_id: this.consequenceId,
         repeat_days: this.repeat_days,
       }),
     });
@@ -514,7 +519,7 @@ export class Task {
       let punishment_span = confirm_penalty_window.querySelector("#punishment");
 
       punishment_task_span.innerHTML = this.name;
-      punishment_span.innerHTML = "test";
+      punishment_span.innerHTML = this.assignRandomConsequence();
 
       switch_window("confirm_penalty_window");
       return;
@@ -530,13 +535,21 @@ export class Task {
   }
 
   assignRandomConsequence() {
-    const randomConsequence =
-      concecenses[Math.floor(Math.random() * concecenses.length)];
+    if (!this.concecenses_id) {
+      console.log("assigning random concecnse");
+      const randomConsequence =
+        concecenses[Math.floor(Math.random() * concecenses.length)];
 
-    this.update_task({
-      failed: true,
-      consequenceId: randomConsequence.consequence_id,
-    });
+      this.update_task({
+        failed: true,
+        consequenceId: randomConsequence.concecenses_id,
+      });
+
+      return randomConsequence.name;
+    } else {
+      console.log("using already asssing concecense");
+      return this.concecenses_id;
+    }
   }
 }
 
@@ -699,6 +712,7 @@ for (const task of tasks) {
     task.end_time,
     task.completed,
     task.failed,
+    task.penelty_id,
     task.repeat_days
   );
   t.dom_add_task();

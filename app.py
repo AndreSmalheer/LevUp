@@ -230,6 +230,7 @@ def update_item():
         completed = request.json.get("completed")
         failed = request.json.get("failed")
         repeat_days = request.json.get("repeat_days")
+        penelty_id = request.json.get("penelty_id")
         repeat_days_string = ",".join(repeat_days) if repeat_days else None
 
         conn = get_connection()
@@ -238,9 +239,9 @@ def update_item():
         cursor.execute('''
         UPDATE tasks
         SET task_name = ?, coin_reward = ?, xp_reward = ?, start_time = ?, end_time = ?,
-            completed = ?, failed = ?, repeat_days = ?
+            completed = ?, failed = ?, penelty_id = ?, repeat_days = ?
         WHERE id = ?
-        ''', (name, coin_reward, xp_reward, start_time, end_time, completed, failed, repeat_days_string, task_id))
+        ''', (name, coin_reward, xp_reward, start_time, end_time, completed, failed, penelty_id,  repeat_days_string, task_id))
 
         conn.commit()
         conn.close()
