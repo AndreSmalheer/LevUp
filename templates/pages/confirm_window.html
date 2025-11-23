@@ -20,6 +20,11 @@
 
 <script>
   function handleAccept() {
-    return;
+    parrent = document.getElementById("{{ window_id }}");
+    punishment_name = parrent.querySelector("#punishment_task");
+    punishment = parrent.querySelector("#punishment");
+
+    console.log(punishment);
+    console.log(punishment_name);
   }
 </script>

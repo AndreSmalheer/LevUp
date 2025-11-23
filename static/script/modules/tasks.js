@@ -528,6 +528,16 @@ export class Task {
       }
     }
   }
+
+  assignRandomConsequence() {
+    const randomConsequence =
+      concecenses[Math.floor(Math.random() * concecenses.length)];
+
+    this.update_task({
+      failed: true,
+      consequenceId: randomConsequence.consequence_id,
+    });
+  }
 }
 
 export class Concecenses {
