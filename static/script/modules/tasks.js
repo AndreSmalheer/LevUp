@@ -505,7 +505,18 @@ export class Task {
 
   click() {
     if (this.failed) {
-      console.log("task failed");
+      let confirm_penalty_window = document.getElementById(
+        "confirm_penalty_window"
+      );
+
+      let punishment_task_span =
+        confirm_penalty_window.querySelector("#punishment_task");
+      let punishment_span = confirm_penalty_window.querySelector("#punishment");
+
+      punishment_task_span.innerHTML = this.name;
+      punishment_span.innerHTML = "test";
+
+      switch_window("confirm_penalty_window");
       return;
     }
 
