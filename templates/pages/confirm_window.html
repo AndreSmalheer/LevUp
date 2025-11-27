@@ -1,0 +1,38 @@
+<!-- prettier-ignore -->
+<div id="{{ window_id }}" class="system-window">
+
+  {% if show_back_btn %}
+    <div class="back-btn" onclick="switch_to_main_window()"></div>
+  {% endif %}
+
+  <h1>
+    Because you failed to complete
+    <span class="punishment_task">Task name</span>, You must
+    <span id="punishment">Punisment name</span>
+  </h1>
+
+  <div id="window-actions">
+    <button id="decline-btn" class="system-button" onclick="switch_to_main_window()">Decline</button>
+    <button id="accept-btn" class="system-button" onclick="handleAccept()">Accept</button>
+  </div>
+
+</div>
+
+<script type="module">
+  import {
+    tasksMap,
+    Task,
+  } from "{{ url_for('static', filename='script/modules/tasks.js') }}";
+
+  function handleAccept() {
+    const parrent = document.getElementById("{{ window_id }}");
+    const punishment_name = parrent.querySelector(".punishment_task");
+    const punishment_id = punishment_name.id;
+    const punishment = parrent.querySelector("#punishment");
+
+    const task = tasksMap.get(parseInt(punishment_id));
+    task.acceptConsequence();
+  }
+
+  window.handleAccept = handleAccept;
+</script>

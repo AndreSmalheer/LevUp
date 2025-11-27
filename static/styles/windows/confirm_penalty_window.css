@@ -1,0 +1,26 @@
+#confirm_penalty_window {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#confirm_penalty_window.active {
+  display: flex;
+}
+
+#confirm_penalty_window h1 {
+  max-width: 80%;
+  text-align: center;
+}
+
+#confirm_penalty_window .punishment_task {
+  font-weight: bold;
+  color: #00ffea;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.9), 0 0 12px rgba(0, 255, 255, 0.7);
+}
+
+#confirm_penalty_window #punishment {
+  font-weight: bold;
+  color: #ff4d4d;
+  text-shadow: 0 0 8px rgba(255, 50, 50, 0.9), 0 0 16px rgba(255, 0, 0, 0.6);
+}
