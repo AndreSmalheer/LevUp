@@ -203,8 +203,12 @@ export class Task {
       const [endHours, endMinutes] = this.end_time.split(":").map(Number);
       const endTime = new Date();
       endTime.setHours(endHours, endMinutes, 0, 0);
-      this.failed = endTime < now && !this.completed;
-      this.markFailed();
+      if (endTime < now && !this.completed) {
+        this.failed = true;
+        this.markFailed();
+      } else {
+        this.failed = false;
+      }
     }
   }
 
@@ -407,7 +411,7 @@ export class Task {
     this.end_time = end_time;
     this.completed = completed;
     this.failed = failed;
-    this.consequenceId = consequenceId;
+    this.concecenses_id = consequenceId;
     this.repeat_days = repeat_days;
 
     // Get elements
@@ -515,10 +519,11 @@ export class Task {
       );
 
       let punishment_task_span =
-        confirm_penalty_window.querySelector("#punishment_task");
+        confirm_penalty_window.querySelector(".punishment_task");
       let punishment_span = confirm_penalty_window.querySelector("#punishment");
 
       punishment_task_span.innerHTML = this.name;
+      punishment_task_span.id = this.task_id;
       punishment_span.innerHTML = this.assignRandomConsequence();
 
       switch_window("confirm_penalty_window");
@@ -540,6 +545,8 @@ export class Task {
       const randomConsequence =
         concecenses[Math.floor(Math.random() * concecenses.length)];
 
+      console.log(randomConsequence.concecenses_id);
+
       this.update_task({
         failed: true,
         consequenceId: randomConsequence.concecenses_id,
@@ -548,7 +555,33 @@ export class Task {
       return randomConsequence.name;
     } else {
       console.log("using already asssing concecense");
-      return this.concecenses_id;
+      const concecense = concecensesMap.get(this.concecenses_id);
+
+      return concecense.name;
+    }
+  }
+
+  acceptConsequence() {
+    if (this.concecenses_id) {
+      const concecense = concecensesMap.get(this.concecenses_id);
+
+      this.remove_task();
+      this.hide_task();
+      const new_task = new Task(
+        null,
+        concecense.name,
+        this.coinReward * -1,
+        this.expReward * -1,
+        null,
+        "23:59",
+        false,
+        false,
+        null
+      );
+
+      new_task.add_task();
+
+      switch_to_main_window();
     }
   }
 }

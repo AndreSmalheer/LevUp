@@ -13,7 +13,7 @@
   text-align: center;
 }
 
-#confirm_penalty_window #punishment_task {
+#confirm_penalty_window .punishment_task {
   font-weight: bold;
   color: #00ffea;
   text-shadow: 0 0 6px rgba(0, 255, 255, 0.9), 0 0 12px rgba(0, 255, 255, 0.7);

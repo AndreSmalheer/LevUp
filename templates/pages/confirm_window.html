@@ -7,7 +7,7 @@
 
   <h1>
     Because you failed to complete
-    <span id="punishment_task">Task name</span>, You must
+    <span class="punishment_task">Task name</span>, You must
     <span id="punishment">Punisment name</span>
   </h1>
 
@@ -18,13 +18,21 @@
 
 </div>
 
-<script>
-  function handleAccept() {
-    parrent = document.getElementById("{{ window_id }}");
-    punishment_name = parrent.querySelector("#punishment_task");
-    punishment = parrent.querySelector("#punishment");
+<script type="module">
+  import {
+    tasksMap,
+    Task,
+  } from "{{ url_for('static', filename='script/modules/tasks.js') }}";
 
-    console.log(punishment);
-    console.log(punishment_name);
+  function handleAccept() {
+    const parrent = document.getElementById("{{ window_id }}");
+    const punishment_name = parrent.querySelector(".punishment_task");
+    const punishment_id = punishment_name.id;
+    const punishment = parrent.querySelector("#punishment");
+
+    const task = tasksMap.get(parseInt(punishment_id));
+    task.acceptConsequence();
   }
+
+  window.handleAccept = handleAccept;
 </script>
