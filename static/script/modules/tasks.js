@@ -35,6 +35,18 @@ function handleLiAction(action, taskId, current_item) {
 
       switch_window("delete_task_window");
     }
+
+    if (action === "fail task") {
+      task.markFailed();
+    }
+
+    if (action === "reset task") {
+      task.update_task({ failed: false, completed: false });
+    }
+
+    if (action === "complete task") {
+      task.update_task({ completed: true });
+    }
   }
 
   if (current_item == "concecense") {
@@ -126,24 +138,26 @@ class PopUp {
     // Clear existing content first
     this.element.innerHTML = "";
 
-    if (parentElement.classList.contains("failed")) {
+    if (!admin && parentElement.classList.contains("failed")) {
       this.element.innerHTML = `<ul><li>unavailable</li></ul>`;
     } else {
-      if (this.items.length > 0) {
-        const ul = document.createElement("ul");
-        for (let item of this.items) {
-          const li = document.createElement("li");
-          li.textContent = item;
+      // otherwise, clear and build the list
+      this.element.innerHTML = "";
 
-          li.addEventListener("click", () => {
-            this.LiCLick(item);
-            this.hide();
-          });
+      const ul = document.createElement("ul");
+      for (let item of this.items) {
+        const li = document.createElement("li");
+        li.textContent = item;
 
-          ul.appendChild(li);
-        }
-        this.element.appendChild(ul); // use this.element here
+        li.addEventListener("click", () => {
+          this.LiCLick(item);
+          this.hide();
+        });
+
+        ul.appendChild(li);
       }
+
+      this.element.appendChild(ul);
     }
   }
 
@@ -723,13 +737,29 @@ export class Concecenses {
 }
 
 // popups
-const taskPopUp = new PopUp("task_popup", ["Edit Task", "Delete Task"]);
+const admin = false;
+
+let taskPopUp;
+
+if (admin) {
+  taskPopUp = new PopUp("task_popup", [
+    "Edit Task",
+    "Delete Task",
+    "Fail Task",
+    "Reset Task",
+    "complete task",
+  ]);
+} else {
+  taskPopUp = new PopUp("task_popup", ["Edit Task", "Delete Task"]);
+}
+
 taskPopUp.create();
 
 const concecensePopUp = new PopUp("concecense_popup", [
   "Edit concecense",
   "Delete concecense",
 ]);
+
 concecensePopUp.create();
 
 const tasksMap = new Map();
