@@ -83,6 +83,27 @@ function handleLiAction(action, taskId, current_item) {
   }
 }
 
+function orgenize_tasks() {
+  const tasks_container = document.getElementById("tasks_container");
+  tasks_container.innerHTML = "";
+
+  const tasksArray = Array.from(tasksMap.values());
+
+  tasksArray.sort((a, b) => {
+    const parseTime = (t) => {
+      if (!t) return 0;
+      const [hours, minutes] = t.split(":").map(Number);
+      return hours * 60 + minutes;
+    };
+
+    return parseTime(a.start_time) - parseTime(b.start_time);
+  });
+
+  for (const task of tasksArray) {
+    task.dom_add_task();
+  }
+}
+
 class PopUp {
   constructor(id, items, x, y) {
     this.id = id;
@@ -781,6 +802,8 @@ for (const task of tasks) {
   t.dom_add_task();
   tasksMap.set(task.task_id, t);
 }
+
+orgenize_tasks();
 
 for (const concecense of concecenses) {
   let c = new Concecenses(
