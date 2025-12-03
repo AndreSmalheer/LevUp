@@ -67,8 +67,8 @@ def reset_task():
                     requests.post(API_URL, json=payload)
                     continue
             else:
-                # Remove/ignore → no update needed
-                continue
+                # remove the task
+                pass
 
         # ---------------------------
         # 3. TASKS THAT SHOULD RUN TODAY OR WERE MISSED YESTERDAY

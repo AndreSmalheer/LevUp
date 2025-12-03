@@ -47,6 +47,10 @@ function handleLiAction(action, taskId, current_item) {
     if (action === "complete task") {
       task.update_task({ completed: true });
     }
+
+    if (action === "daily tasks reset") {
+      fetch("/api/resetAllTasks", { method: "POST" });
+    }
   }
 
   if (current_item == "concecense") {
@@ -758,7 +762,7 @@ export class Concecenses {
 }
 
 // popups
-const admin = false;
+const admin = true;
 
 let taskPopUp;
 
@@ -769,6 +773,7 @@ if (admin) {
     "Fail Task",
     "Reset Task",
     "complete task",
+    "Daily tasks reset",
   ]);
 } else {
   taskPopUp = new PopUp("task_popup", ["Edit Task", "Delete Task"]);

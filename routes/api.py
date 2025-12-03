@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models.db import get_connection
 from models.user import get_user
+from scheduler.tasks import reset_task
 
 api_bp = Blueprint("api", __name__)
 
@@ -231,3 +232,8 @@ def update_item():
         return jsonify({"message": "user settings updated"}), 200
 
     return jsonify({"status": "Failed", "message": "Data type does not match"})
+
+@api_bp.route("/api/resetAllTasks",  methods=["POST"])
+def resetAllTasks():
+    reset_task()
+    return "Tasks reset", 200
