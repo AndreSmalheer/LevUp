@@ -156,7 +156,8 @@ def update_item():
         failed = request.json.get("failed")
         repeat_days = request.json.get("repeat_days")
         penelty_id = request.json.get("penelty_id")
-        repeat_days_string = ",".join(repeat_days) if repeat_days else None
+        repeat_days_list = [repeat_days] if isinstance(repeat_days, str) else repeat_days
+        repeat_days_string = ",".join(repeat_days_list) if repeat_days_list else None
 
         conn = get_connection()
         cursor = conn.cursor()

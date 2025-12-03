@@ -7,21 +7,23 @@ def reset_task():
     tasks = get_tasks()
     API_URL = "http://localhost:5000/api/update"
 
-    today = datetime.today().strftime("%A")
-    yesterday = (datetime.today() - timedelta(days=1)).strftime("%A")
+    today = datetime.today().strftime("%A").lower()
+    yesterday = (datetime.today() - timedelta(days=1)).strftime("%A").lower()
 
     for task in tasks:
         task_id = task['task_id']
         failed = task['failed']
         completed = task['completed']
-        repeat_days = task['repeat_days']
         reward_coins = task['coin_reward']
         reward_xp = task['xp_reward']
         start_time = task['start_time']
         end_time = task['end_time']
         penelty_id = task['penelty_id']
 
-        repeat_days_string = ",".join(repeat_days) if repeat_days else None
+        repeat_days = task['repeat_days']
+        if not isinstance(repeat_days, list):
+         repeat_days_list = [repeat_days] if repeat_days else []
+
 
         # Data template for update_task
         payload = {
@@ -68,25 +70,40 @@ def reset_task():
                     continue
             else:
                 # remove the task
-                pass
+                requests.post("http://localhost:5000/api/remvoe", json={
+                "type": "remove_task",
+                "task_id": task_id
+                })
+                continue
 
         # ---------------------------
         # 3. TASKS THAT SHOULD RUN TODAY OR WERE MISSED YESTERDAY
         # ---------------------------
-        if repeat_days: 
+
+        print(repeat_days)
+
+        if repeat_days:
             if today in repeat_days:
                 if yesterday in repeat_days:
-                    # Mark as failed because yesterday was missed
                     payload["failed"] = True
                     payload["completed"] = False
                     requests.post(API_URL, json=payload)
+        
+                    requests.post("http://localhost:5000/api/add", json={
+                        "type": "add_task",
+                        "task_name": task['task_name'],
+                        "coin_reward": reward_coins,
+                        "xp_reward": reward_xp,
+                        "start_time": start_time,
+                        "end_time": end_time,
+                        "repeat_days": repeat_days_list
+                    })
+                    continue
                 else:
-                    # Normal scheduling (no status change)
                     requests.post(API_URL, json=payload)
                 continue
-
+        
             elif yesterday in repeat_days:
-                # Was scheduled yesterday but NOT today → mark failed, no new task
                 payload["failed"] = True
                 payload["completed"] = False
                 requests.post(API_URL, json=payload)
