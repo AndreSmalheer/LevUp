@@ -762,7 +762,7 @@ export class Concecenses {
 }
 
 // popups
-const admin = true;
+const admin = false;
 
 let taskPopUp;
 
@@ -792,20 +792,22 @@ const tasksMap = new Map();
 const concecensesMap = new Map();
 
 for (const task of tasks) {
-  let t = new Task(
-    task.task_id,
-    task.task_name,
-    task.coin_reward,
-    task.xp_reward,
-    task.start_time,
-    task.end_time,
-    task.completed,
-    task.failed,
-    task.penelty_id,
-    task.repeat_days
-  );
-  t.dom_add_task();
-  tasksMap.set(task.task_id, t);
+  if (!task.hidden) {
+    let t = new Task(
+      task.task_id,
+      task.task_name,
+      task.coin_reward,
+      task.xp_reward,
+      task.start_time,
+      task.end_time,
+      task.completed,
+      task.failed,
+      task.penelty_id,
+      task.repeat_days
+    );
+    t.dom_add_task();
+    tasksMap.set(task.task_id, t);
+  }
 }
 
 orgenize_tasks();

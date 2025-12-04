@@ -14,6 +14,7 @@ def get_tasks():
         "end_time": row["end_time"],
         "completed": bool(row["completed"]),
         "failed": bool(row['failed']),
+        "hidden": bool(row['hidden']),
         "penelty_id": (row['penelty_id']),
         "repeat_days": row["repeat_days"]
     } for row in rows]
