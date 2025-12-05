@@ -341,7 +341,7 @@ export class Task {
     coinContainer.classList.add("coin_container");
     const coinIcon = document.createElement("img");
     coinIcon.classList.add("coin_icon");
-    coinIcon.src = "/static/images/icons/coin.png";
+    coinIcon.src = "/static/images/icons/xp.png";
     const coinAmount = document.createElement("h1");
     coinAmount.textContent = this.coinReward;
     coinContainer.appendChild(coinIcon);
