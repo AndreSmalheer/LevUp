@@ -238,7 +238,6 @@ export class Task {
 
   checkIfFailed() {
     const now = new Date();
-
     if (this.end_time) {
       const [endHours, endMinutes] = this.end_time.split(":").map(Number);
       const endTime = new Date();
@@ -246,8 +245,6 @@ export class Task {
       if (endTime < now && !this.completed) {
         this.failed = true;
         this.markFailed();
-      } else {
-        this.failed = false;
       }
     }
   }
@@ -587,6 +584,11 @@ export class Task {
       } else {
         this.update_task({ completed: false, click: true });
       }
+    } else {
+      console.log("task clikced");
+      if (this.failed) {
+        print("eccepting punishment");
+      }
     }
   }
 
@@ -822,6 +824,9 @@ for (const task of tasks) {
       task.penelty_id,
       task.repeat_days
     );
+
+    console.log(t);
+    console.log(task.failed);
     t.dom_add_task();
     tasksMap.set(task.task_id, t);
   }
