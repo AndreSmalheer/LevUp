@@ -41,6 +41,8 @@ async function handleTaskForm(form) {
     document.querySelectorAll('input[name="repeat_days"]:checked')
   ).map((checkbox) => checkbox.value);
 
+  console.log(repeatDays);
+
   const new_task = new Task(
     null,
     task_name,
@@ -50,6 +52,8 @@ async function handleTaskForm(form) {
     end_time,
     false,
     false,
+    false,
+    null,
     repeatDays
   );
   new_task.add_task();
