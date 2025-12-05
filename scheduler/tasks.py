@@ -113,11 +113,14 @@ def reset_task():
                     continue
 
             else:
-                payload["failed"] = False
-                payload["completed"] = False
-                payload["hidden"] = False
-                requests.post(API_URL, json=payload)
-                continue    
+                if today in repeat_days:
+                 payload["failed"] = False
+                 payload["completed"] = False
+                 payload["hidden"] = False
+                 requests.post(API_URL, json=payload)
+                 continue  
+
+                continue 
     
 
         # ---------------------------
