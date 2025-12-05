@@ -207,6 +207,7 @@ export class Task {
     end_time = null,
     completed = false,
     failed = false,
+    hidden = false,
     concecenses_id = null,
     repeat_days = []
   ) {
@@ -384,8 +385,16 @@ export class Task {
   }
 
   hide_task() {
-    let task_element = document.getElementById(this.task_id);
+    const tasks_container = document.getElementById("tasks_container");
+    const task_element = tasks_container.querySelector(
+      `[id='${this.task_id}']`
+    );
+
+    console.log(task_element);
+
     task_element.remove();
+
+    this.update_task({ hidden: true, failed: false });
   }
 
   add_task() {
@@ -438,6 +447,7 @@ export class Task {
     end_time = this.end_time,
     completed = this.completed,
     failed = this.failed,
+    hidden = this.hidden,
     consequenceId = this.concecenses_id,
     repeat_days = this.repeat_days,
     click = false,
@@ -450,6 +460,7 @@ export class Task {
     this.end_time = end_time;
     this.completed = completed;
     this.failed = failed;
+    this.hidden = hidden;
     this.concecenses_id = consequenceId;
     this.repeat_days = repeat_days;
 
@@ -484,6 +495,7 @@ export class Task {
         end_time: this.end_time,
         completed: this.completed,
         failed: this.failed,
+        hidden: this.hidden,
         penelty_id: this.consequenceId,
         repeat_days: this.repeat_days,
       }),
@@ -604,8 +616,12 @@ export class Task {
     if (this.concecenses_id) {
       const concecense = concecensesMap.get(this.concecenses_id);
 
-      this.remove_task();
-      this.hide_task();
+      if (this.repeat_days) {
+        this.hide_task();
+      } else {
+        this.remove_task();
+      }
+
       const new_task = new Task(
         null,
         concecense.name,
@@ -762,7 +778,7 @@ export class Concecenses {
 }
 
 // popups
-const admin = false;
+const admin = true;
 
 let taskPopUp;
 
@@ -802,6 +818,7 @@ for (const task of tasks) {
       task.end_time,
       task.completed,
       task.failed,
+      task.hidden,
       task.penelty_id,
       task.repeat_days
     );
