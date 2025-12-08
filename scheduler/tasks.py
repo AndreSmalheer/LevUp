@@ -1,14 +1,29 @@
 from models.task import get_tasks
+from models.user import get_user
 
 def reset_task():
     from datetime import datetime, timedelta
     import requests 
 
-    tasks = get_tasks()
+    tasks = get_tasks()   
+    user = get_user()
+
     API_URL = "http://localhost:5000/api/update"
 
     today = datetime.today().strftime("%A").lower()
     yesterday = (datetime.today() - timedelta(days=1)).strftime("%A").lower()
+
+    payload_carachter_stats = {
+            "type": "update_user_stats",
+            "user_id": user['id'],
+            "level": user['level'],
+            "coins": user['coins'],
+            "xp": user['xp'],
+            "xp_to_next_level": user['xp_to_next_level'],
+            "last_task_reset": datetime.today().strftime("%Y-%m-%d"),
+    }
+
+    requests.post(API_URL, json=payload_carachter_stats)
 
     for task in tasks:
         task_id = task['task_id']

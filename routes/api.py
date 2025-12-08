@@ -200,15 +200,16 @@ def update_item():
         coins = request.json.get("coins")
         xp = request.json.get("xp")
         xp_to_next_level = request.json.get("xp_to_next_level")
+        last_task_reset = request.json.get("last_task_reset")
 
         conn = get_connection()
         cursor = conn.cursor()
 
         cursor.execute('''
         UPDATE character_stats
-        SET level = ?, coins = ?, xp = ?, xp_to_next_level = ?
+        SET level = ?, coins = ?, xp = ?, xp_to_next_level = ?, last_task_reset = ?
         WHERE user_id = ?
-        ''', (level, coins, xp, xp_to_next_level, user_id))
+        ''', (level, coins, xp, xp_to_next_level, last_task_reset,  user_id))
 
         conn.commit()
         conn.close()

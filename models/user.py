@@ -25,5 +25,6 @@ def get_user():
         "level": stats["level"],
         "coins": stats["coins"],
         "xp": stats["xp"],
-        "xp_to_next_level": stats["xp_to_next_level"]
+        "xp_to_next_level": stats["xp_to_next_level"],
+        "last_task_reset": stats["last_task_reset"]
     }

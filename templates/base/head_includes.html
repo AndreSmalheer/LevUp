@@ -1,13 +1,14 @@
 <!-- load varilbe -->
 <script>
   class User {
-      constructor({ id, name, xp = 0, xpToNextLevel = 0, level = 0, coins = 0 }) {
+      constructor({ id, name, xp = 0, xpToNextLevel = 0, level = 0, coins = 0, last_task_reset = null }) {
           this.id = id;
           this.name = name;
           this.xp = xp;
           this.xpToNextLevel = xpToNextLevel;
           this.level = level;
           this.coins = coins;
+          this.last_task_reset = last_task_reset
       }
 
       async updateUserSettings(newName) {
@@ -37,7 +38,8 @@
       xp: {{ (user.xp | default(0)) | tojson }},
       xpToNextLevel: {{ (user.xp_to_next_level | default(0)) | tojson }},
       level: {{ (user.level | default(0)) | tojson }},
-      coins: {{ (user.coins | default(0)) | tojson }}
+      coins: {{ (user.coins | default(0)) | tojson }},
+      last_task_reset: {{ (user.last_task_reset | default(None)) | tojson }}
   });
 
   // Tasks array
