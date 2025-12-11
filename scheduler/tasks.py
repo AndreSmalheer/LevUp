@@ -105,16 +105,6 @@ def reset_task():
                         payload["completed"] = False
                         payload["hidden"] = False
                         requests.post(API_URL, json=payload)
-            
-                        requests.post("http://localhost:5000/api/add", json={
-                            "type": "add_task",
-                            "task_name": task['task_name'],
-                            "coin_reward": reward_coins,
-                            "xp_reward": reward_xp,
-                            "start_time": start_time,
-                            "end_time": end_time,
-                            "repeat_days": repeat_days_list
-                        })
                         continue
                     else:
                         requests.post(API_URL, json=payload)
