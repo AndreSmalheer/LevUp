@@ -541,7 +541,6 @@ export class Task {
           coins: currentUser.coins,
           xp: currentUser.xp,
           xp_to_next_level: currentUser.xpToNextLevel,
-          last_task_reset: currentUser.last_task_reset,
         }),
       });
 
@@ -781,7 +780,7 @@ export class Concecenses {
 }
 
 // popups
-const admin = false;
+const admin = true;
 
 let taskPopUp;
 
@@ -830,32 +829,6 @@ for (const task of tasks) {
     console.log(task.failed);
     t.dom_add_task();
     tasksMap.set(task.task_id, t);
-  }
-}
-
-if (currentUser.last_task_reset != null) {
-  const lastReset = new Date(currentUser.last_task_reset);
-  const today = new Date();
-
-  // Normalize both dates to YYYY-MM-DD (no hours)
-  const last = new Date(
-    lastReset.getFullYear(),
-    lastReset.getMonth(),
-    lastReset.getDate()
-  );
-  const now = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-  // Calculate difference in days
-  const diffInMs = now - last;
-  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-
-  if (diffInDays === 1) {
-    console.log("Last task reset was yesterday!");
-
-    (async () => {
-      await fetch("/api/resetAllTasks", { method: "POST" });
-      // window.location.reload();
-    })();
   }
 }
 
